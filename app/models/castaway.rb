@@ -1,0 +1,2 @@
+class Castaway < ApplicationRecord
+end

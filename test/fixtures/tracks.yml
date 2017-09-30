@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  track: MyString
+  artist: 
+  album: 
+  track_number: 
+  record_label: 
+  performers: 
+
+two:
+  track: MyString
+  artist: 
+  album: 
+  track_number: 
+  record_label: 
+  performers: 
