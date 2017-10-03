@@ -1,6 +1,7 @@
 class Choice < ApplicationRecord
   belongs_to :episode
   belongs_to :track
+  has_one :artist, through: :track
 
   def self.import(music_choices, favourite, episode)
     puts music_choices.count
@@ -8,9 +9,12 @@ class Choice < ApplicationRecord
     music_choices.each do |music_choice|
       order += 1
       track_is_favourite = false
+
       if music_choice.css("span[property='name']").count > 1
-        track_name = music_choice.css("span[property='name']")[1].inner_text.strip
-        artist_name = music_choice.css('span.artist').inner_text.strip
+
+        artist_count = music_choice.css('span.artist').count
+        artist_name = music_choice.css('span.artist').map {|artist| artist.inner_text}.join(" & ")
+        track_name = music_choice.css("span[property='name']")[artist_count].inner_text.strip
       else
         artist_name = nil
         track_name = music_choice.css("span[property='name']").inner_text.strip
@@ -26,21 +30,19 @@ class Choice < ApplicationRecord
       if track_name == favourite[:track] && artist_name == favourite[:artist]
         track_is_favourite = true
       end
-      artist = Artist.where(name: artist_name).first_or_create
-      track = Track.where(
-        track: track_name,
-        artist_id: artist.id,
-        album: album,
-        track_number: track_number,
-        record_label: record_label,
-        performed_by: performed_by
-      ).first_or_create
+
+
+      artist = Artist.where('lower(name) = ?', artist_name.to_s.downcase).first_or_create(:name=>artist_name)
+      artist.update(appearances: artist.appearances + 1)
+      track = Track.where("lower(track) = ? AND artist_id = ?", track_name.to_s.downcase, artist.id).first_or_create(:artist_id => artist.id, :track=>track_name)
+      track.update(appearances: track.appearances + 1)
       choice = Choice.where(
         episode_id: episode.id,
         track_id: track.id,
         favourite: track_is_favourite,
         order: order
       ).first_or_create
+
       puts artist.inspect, track.inspect, choice.inspect
     end
   end

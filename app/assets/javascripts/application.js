@@ -11,5 +11,12 @@
 // about supported directives.
 //
 //= require rails-ujs
+//= require jquery
+//= require jquery_ujs
+//= require jquery-ui
 //= require turbolinks
+//= require Chart.bundle
+//= require chartkick
+//= require popper
+//= require bootstrap
 //= require_tree .

@@ -1,0 +1,19 @@
+<h2><%= @episode.castaway.name %> - <%= @episode.episode_date %></h2>
+
+
+
+
+<table class = "table">
+  <tr>
+    <th>Track</th>
+    <th>Artist</th>
+    <th>Chosen by # other guests</th>
+  </tr>
+<% @tracks.each do |track| %>
+<tr>
+  <td><%= link_to track.track, track %></td>
+  <td><%= track.artist.name %></td>
+  <td><%= track.appearances %></td>
+</tr>
+<% end %>
+</table>

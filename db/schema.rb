@@ -10,19 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170930190851) do
+ActiveRecord::Schema.define(version: 20171003140232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "artists", force: :cascade do |t|
     t.string "name"
+    t.integer "appearances", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
+    t.index ["slug"], name: "index_artists_on_slug", unique: true
   end
 
   create_table "castaways", force: :cascade do |t|
     t.string "name"
+    t.string "wikipedia_url"
+    t.integer "appearances", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -47,7 +52,9 @@ ActiveRecord::Schema.define(version: 20170930190851) do
     t.string "book"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
     t.index ["castaway_id"], name: "index_episodes_on_castaway_id"
+    t.index ["slug"], name: "index_episodes_on_slug", unique: true
   end
 
   create_table "tracks", force: :cascade do |t|
@@ -57,9 +64,12 @@ ActiveRecord::Schema.define(version: 20170930190851) do
     t.integer "track_number"
     t.string "record_label"
     t.string "performers", array: true
+    t.integer "appearances", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
     t.index ["artist_id"], name: "index_tracks_on_artist_id"
+    t.index ["slug"], name: "index_tracks_on_slug", unique: true
   end
 
   add_foreign_key "choices", "episodes"

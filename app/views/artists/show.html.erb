@@ -1,0 +1,57 @@
+<div class ="row sea2"><h2><%= @artist.name %></h2>
+</div>
+<div class ="row beach1">
+
+<p>Songs by <%= @artist.name %> have been picked <%= @artist.appearances %> times on Desert Island Discs, in <%= @artist.episodes.distinct.count %> episodes.
+<br><br>
+Last picked on <%= @artist.episodes.order(:broadcast_date).last.episode_date %> by <%= @artist.episodes.order(:broadcast_date).last.castaway.name %>.
+<br><br>
+First picked on <%= @artist.episodes.order(:broadcast_date).first.episode_date %> by <%= @artist.episodes.order(:broadcast_date).first.castaway.name %>.
+</div>
+<div class="row beach1">
+<p>Often picked with:</p>
+<% @related_artists.each do |related_artist| %>
+<ul>
+  <li><%= link_to related_artist[0].name, related_artist[0] %> (<%= related_artist[1] %>)</li>
+
+</ul>
+<% end %>
+
+</div>
+
+
+
+<div class ="row">
+<div class ="col">
+<h3>Tracks</h3>
+<table class = "table table-striped table-sm">
+  <tr>
+    <th>Title</th>
+    <th>Times Chosen</th>
+  </tr>
+<% @tracks.each do |track| %>
+<tr>
+  <td><%= link_to track.track, track %></td>
+  <td><%= track.appearances %></td>
+</tr>
+<% end %>
+</table>
+</div>
+
+<div class ="col">
+  <h3>Appearances</h3>
+  <table class = "table table-striped table-sm">
+    <tr>
+      <th>Guest</th>
+      <th>Appearance Date</th>
+    </tr>
+  <% @episodes.each do |episode| %>
+  <tr>
+    <td><%= link_to episode.castaway.name, episode %></td>
+    <td><%= episode.episode_date %></td>
+  </tr>
+  <% end %>
+  </table>
+
+</div>
+</div>
