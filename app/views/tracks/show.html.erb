@@ -1,9 +1,9 @@
-<h2><%= @track.artist.name %> - <%= @track.track %></h2>
+<h2><%= link_to @track.artist.name, @track.artist %> - <%= @track.track %></h2>
 
 
 
 
-<table class = "table">
+<table class = "table table-striped table-sm">
   <tr>
     <th>Chosen by</th>
     <th>Chosen on</th>

@@ -111,10 +111,13 @@ GEM
     nio4r (2.1.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
+    oj (3.3.7)
     pg (0.21.0)
     popper_js (1.12.5)
     public_suffix (3.0.0)
     puma (3.10.0)
+    rabl (0.13.1)
+      activesupport (>= 2.3.14)
     rack (2.0.3)
     rack-test (0.7.0)
       rack (>= 1.0, < 3)
@@ -208,8 +211,10 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   listen (>= 3.0.5, < 3.2)
+  oj
   pg (~> 0.18)
   puma (~> 3.7)
+  rabl
   rails (~> 5.1.4)
   sass-rails (~> 5.0)
   selenium-webdriver

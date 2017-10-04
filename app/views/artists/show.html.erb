@@ -4,9 +4,9 @@
 
 <p>Songs by <%= @artist.name %> have been picked <%= @artist.appearances %> times on Desert Island Discs, in <%= @artist.episodes.distinct.count %> episodes.
 <br><br>
-Last picked on <%= @artist.episodes.order(:broadcast_date).last.episode_date %> by <%= @artist.episodes.order(:broadcast_date).last.castaway.name %>.
+Last picked on <%= @artist.episodes.order(:broadcast_date).last.episode_date %> by <%= link_to @artist.episodes.order(:broadcast_date).last.castaway.name, @artist.episodes.order(:broadcast_date).last %>.
 <br><br>
-First picked on <%= @artist.episodes.order(:broadcast_date).first.episode_date %> by <%= @artist.episodes.order(:broadcast_date).first.castaway.name %>.
+First picked on <%= @artist.episodes.order(:broadcast_date).first.episode_date %> by <%= link_to @artist.episodes.order(:broadcast_date).first.castaway.name, @artist.episodes.order(:broadcast_date).first %>.
 </div>
 <div class="row beach1">
 <p>Often picked with:</p>

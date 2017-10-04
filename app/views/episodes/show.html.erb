@@ -3,7 +3,7 @@
 
 
 
-<table class = "table">
+<table class = "table table-striped table-sm">
   <tr>
     <th>Track</th>
     <th>Artist</th>
@@ -12,8 +12,15 @@
 <% @tracks.each do |track| %>
 <tr>
   <td><%= link_to track.track, track %></td>
-  <td><%= track.artist.name %></td>
+  <td><%= link_to track.artist.name, track.artist %></td>
   <td><%= track.appearances %></td>
 </tr>
 <% end %>
 </table>
+
+<p>Book: <%= @episode.book %></p>
+<p>Luxury: <%= @episode.luxury %></p>
+<p>Bible? <%= @episode.bible %></p>
+<% if  @episode.wikipedia_url != ""%>
+<p><%= link_to "Wikipedia Page", "http://en.wikipedia.org" + @episode.wikipedia_url %>
+<% end %>

@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003140232) do
+ActiveRecord::Schema.define(version: 20171004151453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "artists", force: :cascade do |t|
     t.string "name"
@@ -21,6 +22,7 @@ ActiveRecord::Schema.define(version: 20171003140232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.hstore "related_artists", array: true
     t.index ["slug"], name: "index_artists_on_slug", unique: true
   end
 
@@ -30,6 +32,11 @@ ActiveRecord::Schema.define(version: 20171003140232) do
     t.integer "appearances", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "castaways_wiki_occupations", id: false, force: :cascade do |t|
+    t.bigint "castaway_id", null: false
+    t.bigint "wiki_occupation_id", null: false
   end
 
   create_table "choices", force: :cascade do |t|
@@ -53,8 +60,21 @@ ActiveRecord::Schema.define(version: 20171003140232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
+    t.string "bible"
+    t.string "wikipedia_url"
     t.index ["castaway_id"], name: "index_episodes_on_castaway_id"
     t.index ["slug"], name: "index_episodes_on_slug", unique: true
+  end
+
+  create_table "indices", force: :cascade do |t|
+    t.string "index_type"
+    t.string "key"
+    t.hstore "artists", array: true
+    t.hstore "tracks", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.hstore "books", array: true
+    t.hstore "luxuries", array: true
   end
 
   create_table "tracks", force: :cascade do |t|
@@ -70,6 +90,12 @@ ActiveRecord::Schema.define(version: 20171003140232) do
     t.string "slug"
     t.index ["artist_id"], name: "index_tracks_on_artist_id"
     t.index ["slug"], name: "index_tracks_on_slug", unique: true
+  end
+
+  create_table "wiki_occupations", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "choices", "episodes"

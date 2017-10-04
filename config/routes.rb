@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   resources :artists
   resources :tracks
   resources :episodes
+
+  get "/index", :to => 'pages#index'
 end

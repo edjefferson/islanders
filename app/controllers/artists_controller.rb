@@ -11,6 +11,6 @@ class ArtistsController < ApplicationController
     @artist = Artist.friendly.find(params[:id])
     @tracks = @artist.tracks.order(appearances: :desc, track: :asc).limit(20)
     @episodes = @artist.episodes.order(broadcast_date: :desc).distinct.limit(20)
-    @related_artists = @artist.related_artists.map { |x| [Artist.find(x[0]),x[1]]}
+    @related_artists = @artist.related_artists_list.map { |artist| [Artist.find(artist["id"]),artist["appearances"]]}
   end
 end

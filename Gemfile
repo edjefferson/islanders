@@ -38,6 +38,10 @@ gem 'jquery-ui-rails'
 gem 'chartkick'
 gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
 
+# Gemfile
+gem 'rabl'
+# Also add either `oj` or `yajl-ruby` as the JSON parser
+gem 'oj'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
