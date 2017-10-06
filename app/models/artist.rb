@@ -5,10 +5,20 @@ class Artist < ApplicationRecord
   has_many :tracks
   has_many :choices, through: :tracks
   has_many :episodes, through: :tracks
+  has_many :categories, through: :episodes
+  has_many :castaways, through: :episodes
+
+  def appearances_count
+    self.update(appearances: self.choices.distinct.count)
+  end
+
+  def category_count(category)
+    self.castaways.joins(:categories).where('categories.id = ?',category).count
+  end
 
   def update_related_artists
     artist_count = {}
-    self.episodes.each do |episode|
+    self.episodes.includes(:tracks).each do |episode|
       episode.tracks.each do |track|
         if track.artist.name !=""
           artist_count[track.artist.id] == nil ? artist_count[track.artist.id] = 1 : artist_count[track.artist.id] +=1

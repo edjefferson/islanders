@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   resources :artists
   resources :tracks
   resources :episodes
+  resources :categories
+  resources :books
+  resources :luxuries
 
   get "/index", :to => 'pages#index'
 end

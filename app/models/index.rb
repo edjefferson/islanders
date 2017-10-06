@@ -11,44 +11,25 @@ class Index < ApplicationRecord
         end_date = "#{decade[0..-2].to_i + 9}-12-31"
         episodes = Episode.where(:broadcast_date => start_date..end_date).includes(:tracks,:artists)
       end
+      @artists = Artist.where.not(name: [nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id)).group('artists.id').select('artists.id, artists.slug, count(episodes.id) as appearances, artists.name').order('appearances desc').limit(10)
 
-      artists = {}
-      tracks = {}
-      books = {}
-      luxuries = {}
+      @tracks = Track.where.not(track: [nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id)).group('tracks.id').select('tracks.id, tracks.slug, count(episodes.id) as appearances, tracks.track as name').order('appearances desc').limit(10)
+      @books = Book.where.not(name: [nil,"","-"]).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id)).group('books.id').select('books.id, books.slug, count(episodes.id) as appearances, books.name').order('appearances desc').limit(10)
+      @luxuries = Luxury.where.not(name: [nil,"","-"]).joins(:episodes).where("luxuries.id = ANY('{?}')", episodes.pluck(:id)).group('luxuries.id').select('luxuries.id, luxuries.slug, count(episodes.id) as appearances, luxuries.name').order('appearances desc').limit(10)
 
+      top_10_artists = @artists.map{|x| x.serializable_hash.symbolize_keys}
+      top_10_tracks = @tracks.map{|x| x.serializable_hash.symbolize_keys}
+      top_10_tracks.map {|x| x[:artist] = Track.find(x[:id]).artist.name }
 
-      episodes.each do |episode|
-        episode.tracks.each do |track|
-          key = [track.track, track.artist.name, track.slug]
-          tracks[key] == nil ? tracks[key] = 1 : tracks[key] += 1
-        end
-        episode.artists.each do |artist|
-          key = [artist.name, artist.slug]
-          artists[key] == nil ? artists[key] = 1 : artists[key] += 1
-        end
-        if episode.book != nil
-          books[episode.book] == nil ? books[episode.book] = 1 : books[episode.book] += 1
-          luxuries[episode.luxury] == nil ? luxuries[episode.luxury] = 1 : luxuries[episode.luxury] += 1
-        end
-      end
+      top_10_books = @books.map{|x| x.serializable_hash.symbolize_keys}
+      top_10_luxuries = @luxuries.map{|x| x.serializable_hash.symbolize_keys}
 
-      top_10_artists = artists.sort_by { |key, count| [- count, key[1] ]}.select { |artist| artist[0][0]!= ""}[0..9]
-      top_10_artists.map! { |artist| {name: artist[0][0].to_s, appearances: artist[1], slug: artist[0][1].to_s} }
-
-      top_10_tracks = tracks.sort_by { |key, count| [- count, key[1]] }.select { |track| track[0][0]!= ""}[0..9]
-      top_10_tracks.map! { |track| {name: track[0][0].to_s, appearances: track[1], slug: track[0][2].to_s, artist: track[0][1].to_s} }
-
-      top_10_books = books.sort_by { |book, count| [- count, book] }.select { |book| ["No book","Unknown","",nil,"-"].include?(book[0]) == false}[0..9]
-      top_10_books.map! { |book| {name: book[0], appearances: book[1] } }
-
-      top_10_luxuries = luxuries.sort_by { |luxury, count| [- count, luxury] }.select { |luxury| ["No item","Unknown","",nil,"-"].include?(luxury[0]) == false}[0..9]
-      top_10_luxuries.map! { |luxury| {name: luxury[0], appearances: luxury[1] } }
       index = Index.where(index_type:type, key: decade).first_or_create
-      index.update(artists: top_10_artists, tracks: top_10_tracks, books: top_10_books, luxuries: top_10_luxuries)
+      index.update(artists:   top_10_artists, tracks: top_10_tracks, books: top_10_books, luxuries: top_10_luxuries)
+      puts @artists.inspect
 
-
-
+      puts index.inspect
+      sleep 1
     end
 
 

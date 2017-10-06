@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'csv'
 
 class Episode < ApplicationRecord
 
@@ -6,10 +7,12 @@ class Episode < ApplicationRecord
   friendly_id :episode_date, use: :slugged
 
   belongs_to :castaway
+  belongs_to :book
+  belongs_to :luxury
   has_many :choices
   has_many :tracks, through: :choices
   has_many :artists, through: :choices
-
+  has_many :categories, through: :castaway
 
   def episode_date
     if broadcast_date != nil
@@ -20,10 +23,7 @@ class Episode < ApplicationRecord
   end
 
   def self.find_joint_appearances
-
     joint_episodes = Castaway.where("name like '% and %' or name like '% & %' or name like '% Ascension Islands%'").map(&:episodes).flatten
-
-
   end
 
 
@@ -37,7 +37,7 @@ class Episode < ApplicationRecord
 
       episodes = index_doc.css('div.programmes-page/div/ol.highlight-box-wrapper/li')
       episodes.each do |episode_html|
-        castaway_name = episode_html.css("span[property='name']").inner_text
+        castaway_name = episode_html.css("span[property='name']").inner_text.gsub("BBC Radio 4","")
         episode_url = episode_html.css("div.programme").attr("resource").to_s
         castaway = Castaway.where(name: castaway_name).first_or_create
         castaway.update(appearances: castaway.appearances + 1)
@@ -49,11 +49,24 @@ class Episode < ApplicationRecord
     end
   end
 
+  def reset_castaway
+    html = open(self.url)
+    html_doc = Nokogiri::HTML(html.read)
+    html_doc.encoding = 'utf-8'
+    castaway_name = html_doc.css('h1').inner_text.strip
+    castaway = Castaway.where(name: castaway_name).first_or_create
+    castaway.update(appearances: castaway.appearances + 1)
+    self.update(castaway_id: castaway.id)
+  end
 
-  def import_data
-    if self.choices.count < 8
-      html_doc = Nokogiri::HTML(open(self.url))
-      if ["http://www.bbc.co.uk/programmes/p04qw02y"].include?(self.url) == false
+  def import_data(update_all = 0)
+    if self.choices.distinct.count != 8 || update_all == 1 || self.choices.pluck(:favourite).include?(true) == false
+
+
+      html = open(self.url)
+      html_doc = Nokogiri::HTML(html.read)
+      html_doc.encoding = 'utf-8'
+      if ["http://www.bbc.co.uk/programmes/p04qw02y","http://www.bbc.co.uk/programmes/p00fwc7f"].include?(self.url) == false
         first_broadcast = Time.parse(html_doc.css('time')[0].attr('datetime').to_s + " 12PM")
         if first_broadcast > Time.now
           puts "Hasn't been broadcast yet"
@@ -66,10 +79,10 @@ class Episode < ApplicationRecord
           doc.encoding = 'utf-8'
 
 
-          music_choices = doc.css('li.segments-list__item')[0..7]
-          if self.choices.count < 99
-            Choice.import(music_choices, self)
-          end
+          music_choices = doc.css('ul/li.segments-list__item')
+
+          Choice.import(music_choices, self)
+
         end
         self.update(broadcast_date: first_broadcast)
       end
@@ -104,10 +117,40 @@ class Episode < ApplicationRecord
           rescue
             link = ""
           end
-          if columns[2].css('span').count > 1
-            book = columns[2].css('span')[1].inner_text.split("[")[0].to_s
+
+          book_column = columns[2]
+          if book_column.inner_text.strip != "No book"
+            if book_column.css('span').count > 1
+              book_name = book_column.css('span')[1].inner_text.split("[")[0].to_s
+            else
+              book_name = book_column.inner_text.split("[")[0]
+            end
+
+            book = Book.where(name: book_name).first_or_create
+            book_id = book.id
+
+
+            if book_column.css('i').count == 1
+              book_title = book_column.css('i').inner_text.split("[")[0].strip
+              book_column.css('i/a').count > 0 ? book_wiki = book_column.css('i/a').attr('href') : book_wiki = nil
+
+              book_column.search('i').remove
+
+              remaining_text = book_column.inner_text
+              if remaining_text[0..3] == " by "
+                book_author = remaining_text[4..-1].split("[")[0].strip
+                book_column.css('a').count > 0 ? author_wiki = book_column.css('a').attr('href') : author_wiki = nil
+              else
+
+                book_author = nil
+                author_wiki = nil
+              end
+            end
+            #puts book_title, book_wiki, book_author, author_wiki
+
+            book.update(title: book_title, book_wiki: book_wiki, author: book_author, author_wiki: author_wiki)
           else
-            book = columns[2].inner_text.split("[")[0]
+            book_id = nil
           end
 
           if columns[2].to_s.include?"endnote_bible-kor"
@@ -119,10 +162,19 @@ class Episode < ApplicationRecord
           else
             bible = "Bible"
           end
+
+
           if columns[3].css('span').count > 1
-            luxury = columns[3].css('span')[1].inner_text.split("[")[0].to_s
+            luxury_name = columns[3].css('span')[1].inner_text.split("[")[0].to_s
           else
-            luxury = columns[3].inner_text.split("[")[0].to_s
+            luxury_name = columns[3].inner_text.split("[")[0].to_s
+          end
+
+          luxury_urls = columns[3].css('a').map { |a| a.attr('href').to_s}
+
+          luxury = Luxury.where(name: luxury_name).first_or_create
+          if luxury_urls != []
+            luxury.update(wiki_urls: luxury_urls)
           end
           #if bible !="Bible"
 
@@ -130,7 +182,7 @@ class Episode < ApplicationRecord
 
           episode = Episode.where(broadcast_date: date).first
           if episode != nil
-          episode.update(broadcast_date: date, wikipedia_url: link, book: book, bible: bible, luxury: luxury)
+            episode.update(broadcast_date: date, wikipedia_url: link, book_id: book_id, book_name: book_name, bible: bible, luxury_name: luxury_name, luxury_id: luxury.id)
           end
 
 
@@ -138,5 +190,51 @@ class Episode < ApplicationRecord
 
       end
     end
+  end
+
+  def self.export
+    CSV.open("csv_export/episodes.csv", "w") do |csv|
+      self.order(broadcast_date: :asc).includes(:castaway).each do |episode|
+        begin
+          castaway_name = episode.castaway.name
+        rescue
+          castaway_name = nil
+        end
+        csv << [episode.broadcast_date, castaway_name, episode.url, episode.download_url, episode.wikipedia_url, episode.book, episode.luxury, episode.bible]
+      end
+    end
+
+    CSV.open("csv_export/choices.csv", "w") do |csv|
+      self.order(broadcast_date: :asc).includes(:choices).each do |episode|
+        episode.choices.order(order: :asc).includes(:track,:artist).each do |choice|
+          csv << [episode.broadcast_date, choice.order, choice.artist.name, choice.track.track, choice.favourite]
+        end
+      end
+    end
+  end
+
+  def self.import
+    Choice.delete_all
+    Artist.delete_all
+    Track.delete_all
+    Episode.delete_all
+    Castaway.delete_all
+    CSV.foreach("csv_export/episodes.csv") do |row|
+      broadcast_date, castaway_name, url, download_url, wikipedia_url, book, luxury, bible = row
+      castaway = Castaway.where(name: castaway_name).first_or_create
+      castaway.update(wikipedia_url: wikipedia_url) if [nil,""].include? wikipedia_url == false
+      episode = Episode.where(broadcast_date: broadcast_date).first_or_create
+      episode.update(castaway_id: castaway.id, url: url, download_url: download_url, wikipedia_url: wikipedia_url, book: book, luxury: luxury, bible: bible)
+    end
+
+    CSV.foreach("csv_export/choices.csv") do |row|
+      episode_broadcast_date, order, artist_name, track_name, favourite = row
+      episode = Episode.where(broadcast_date: episode_broadcast_date).first
+      artist = Artist.where(name: artist_name).first_or_create
+      track = Track.where(artist_id: artist.id, track: track_name).first_or_create
+      choice = Choice.where(episode_id: episode.id, order: order).first_or_create
+      choice.update(track_id: track.id, favourite: favourite)
+    end
+
   end
 end

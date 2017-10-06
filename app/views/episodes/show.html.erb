@@ -1,26 +1,35 @@
-<h2><%= @episode.castaway.name %> - <%= @episode.episode_date %></h2>
+<h2><%= image_tag("episode.svg", :alt => "Episode", :height => 32) %> <%= @episode.castaway.name %> - <%= @episode.episode_date %></h2>
 
 
 
 
 <table class = "table table-striped table-sm">
   <tr>
+    <th>Order</th>
     <th>Track</th>
     <th>Artist</th>
     <th>Chosen by # other guests</th>
+    <th>Fav?</th>
   </tr>
-<% @tracks.each do |track| %>
+<% @choices.order(order: :asc).each do |choice| %>
 <tr>
-  <td><%= link_to track.track, track %></td>
-  <td><%= link_to track.artist.name, track.artist %></td>
-  <td><%= track.appearances %></td>
+  <td><%= image_tag("disc.svg", :alt => "Disc", :height => 16) %> <%= choice.order %></td>
+  <td><%= link_to choice.track.track, choice.track %></td>
+  <td><%= link_to choice.track.artist.name, choice.track.artist %></td>
+  <td><%= choice.track.appearances - 1%></td>
+  <td><%= choice.favourite %></td>
 </tr>
 <% end %>
 </table>
 
-<p>Book: <%= @episode.book %></p>
-<p>Luxury: <%= @episode.luxury %></p>
+<p>Book: <%= image_tag("book.svg", :alt => "Book", :height => 16) %> <%= @episode.book_name %></p>
+<p>Luxury: <%= image_tag("luxury.svg", :alt => "Luxury", :height => 16) %>  <%= @episode.luxury_name %></p>
 <p>Bible? <%= @episode.bible %></p>
+<p><%= link_to "BBC Page", @episode.url %>
 <% if  @episode.wikipedia_url != ""%>
-<p><%= link_to "Wikipedia Page", "http://en.wikipedia.org" + @episode.wikipedia_url %>
+<p><%= link_to "Wikipedia Page", "http://en.wikipedia.org" + @episode.wikipedia_url.to_s %>
 <% end %>
+
+<% @episode.castaway.categories.each do |category| %>
+  <p><%= link_to category.name, category %></p>
+  <%end%>

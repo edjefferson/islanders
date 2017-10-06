@@ -12,7 +12,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
-
+/csv_export
 /node_modules
 /yarn-error.log
 

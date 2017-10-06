@@ -1,4 +1,4 @@
-<div class ="row sea2"><h2><%= @artist.name %></h2>
+<div class ="row sea2"><h2><%= image_tag("artist.svg", :alt => "Artist", :height => 32) %> <%= @artist.name %></h2>
 </div>
 <div class ="row beach1">
 
@@ -12,7 +12,7 @@ First picked on <%= @artist.episodes.order(:broadcast_date).first.episode_date %
 <p>Often picked with:</p>
 <% @related_artists.each do |related_artist| %>
 <ul>
-  <li><%= link_to related_artist[0].name, related_artist[0] %> (<%= related_artist[1] %>)</li>
+  <li><%= image_tag("artist.svg", :alt => "Artist", :height => 16) %> <%= link_to related_artist[0].name, related_artist[0] %> (<%= related_artist[1] %>)</li>
 
 </ul>
 <% end %>
@@ -31,7 +31,7 @@ First picked on <%= @artist.episodes.order(:broadcast_date).first.episode_date %
   </tr>
 <% @tracks.each do |track| %>
 <tr>
-  <td><%= link_to track.track, track %></td>
+  <td><%= image_tag("disc.svg", :alt => "Disc", :height => 16) %> <%= link_to track.track, track %></td>
   <td><%= track.appearances %></td>
 </tr>
 <% end %>
@@ -47,7 +47,7 @@ First picked on <%= @artist.episodes.order(:broadcast_date).first.episode_date %
     </tr>
   <% @episodes.each do |episode| %>
   <tr>
-    <td><%= link_to episode.castaway.name, episode %></td>
+    <td><%= image_tag("episode.svg", :alt => "Episode", :height => 16) %> <%= link_to episode.castaway.name, episode %></td>
     <td><%= episode.episode_date %></td>
   </tr>
   <% end %>

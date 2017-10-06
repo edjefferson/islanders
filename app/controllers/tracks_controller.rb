@@ -10,6 +10,6 @@ class TracksController < ApplicationController
   def show
     page = params[:page].to_i + 1
     @track = Track.friendly.find(params[:id])
-    @episodes = @track.episodes.order(broadcast_date: :asc).each_slice(40).to_a[page - 1]
+    @episodes = @track.episodes.distinct.order(broadcast_date: :asc).each_slice(40).to_a[page - 1]
   end
 end
