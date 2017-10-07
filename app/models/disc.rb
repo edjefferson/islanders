@@ -1,7 +1,7 @@
 require 'csv'
-class Track < ApplicationRecord
+class Disc < ApplicationRecord
   extend FriendlyId
-  friendly_id :track, use: :slugged
+  friendly_id :disc, use: :slugged
 
   belongs_to :artist
   has_many :choices
@@ -13,7 +13,7 @@ class Track < ApplicationRecord
   end
 
   def self.export
-    self.all.each do |track|
+    self.all.each do |disc|
       #
     end
   end

@@ -1,4 +1,4 @@
-class CategoriesController < ApplicationController
+class WikiCategoriesController < ApplicationController
   def index
     decade = params[:decade]
 
@@ -9,26 +9,26 @@ class CategoriesController < ApplicationController
       end_date = "#{decade[0..-2].to_i + 9}-12-31"
       @episodes = Episode.where(:broadcast_date => start_date..end_date)
     end
-    @categories = Category.all.joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('categories.id').select('categories.id, categories.slug, count(episodes.id) as count, categories.name').order('count desc')
+    @wiki_categories = WikiCategory.all.joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('wiki_categories.id').select('wiki_categories.id, wiki_categories.slug, count(episodes.id) as count, wiki_categories.name').order('count desc')
 
   end
 
 
   def show
-    @category = Category.friendly.find(params[:id])
+    @wiki_category = WikiCategory.friendly.find(params[:id])
 
     decade = params[:decade]
     if decade == nil
-      @episodes = @category.episodes.order(:broadcast_date).includes(:artists,:tracks,:castaway)
+      @episodes = @wiki_category.episodes.order(:broadcast_date).includes(:artists,:discs,:castaway)
     else
       start_date = "#{decade[0..-2]}-01-01"
       end_date = "#{decade[0..-2].to_i + 9}-12-31"
-      @episodes = @category.episodes.where(:broadcast_date => start_date..end_date).order(:broadcast_date).includes(:artists,:tracks,:castaway)
+      @episodes = @wiki_category.episodes.where(:broadcast_date => start_date..end_date).order(:broadcast_date).includes(:artists,:discs,:castaway)
     end
 
 
     @artists = Artist.where.not(name: "").joins(:choices).where("choices.episode_id = ANY('{?}')", @episodes.pluck(:id)).select('artists.name as name, count(choices.id) as count, artists.slug as slug').order('count desc').group('name, artists.slug')[0..9]
-    @tracks = Track.where.not(track: "").joins(:choices).where("choices.episode_id = ANY('{?}')", @episodes.pluck(:id)).select('tracks.track as name, count(choices.id) as count, tracks.slug as slug').order('count desc').group('name, tracks.slug')[0..9]
+    @discs = Disc.where.not(disc: "").joins(:choices).where("choices.episode_id = ANY('{?}')", @episodes.pluck(:id)).select('discs.disc as name, count(choices.id) as count, discs.slug as slug').order('count desc').group('name, discs.slug')[0..9]
     books = {}
     luxuries = {}
     @episodes.each do |episode|

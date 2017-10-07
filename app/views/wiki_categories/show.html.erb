@@ -1,4 +1,4 @@
-<div class ="row sea2"><h2><%= @category.name %></h2>
+<div class ="row sea2"><h2><%= @wiki_category.name %></h2>
 </div>
 
 <div class="row beach1">
@@ -33,7 +33,7 @@
     <th>Title</th>
     <th>Times Chosen</th>
   </tr>
-<% @tracks.each do |disc| %>
+<% @discs.each do |disc| %>
 <tr>
   <td><%= image_tag("disc.svg", :alt => "Disc", :height => 16) %> <%= link_to disc.name, disc %></td>
   <td><%= disc.count %></td>

@@ -13,15 +13,15 @@ class PagesController < ApplicationController
       index = Index.where(index_type: "decade", key: "").first
     end
     @artists = index.artists
-    @tracks = index.tracks
+    @discs = index.discs
     @books = index.books
     @luxuries = index.luxuries
     puts index.inspect
     @castaways_count = Episode.where.not(broadcast_date: nil).count
-    @records_count = Track.count
+    @records_count = Disc.count
     @artists_count = Artist.count
     @start_date = Episode.where.not(broadcast_date: nil).order(broadcast_date: :asc).first.episode_date
-    @feed =  OpenStruct.new({artists: @artists, tracks: @tracks, books: @books, luxuries: @luxuries})
+    @feed =  OpenStruct.new({artists: @artists, discs: @discs, books: @books, luxuries: @luxuries})
 
   end
 

@@ -1,4 +1,4 @@
-<h2><%= image_tag("disc.svg", :alt => "Disc", :height => 32) %>  <%= link_to @track.artist.name, @track.artist %> - <%= @track.track %></h2>
+<h2><%= image_tag("disc.svg", :alt => "Disc", :height => 32) %>  <%= link_to @disc.artist.name, @disc.artist %> - <%= @disc.name %></h2>
 
 <%= line_chart @all_chart_data, @chart_options%>
 

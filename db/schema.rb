@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171006165207) do
+ActiveRecord::Schema.define(version: 20171007120047) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,28 +47,35 @@ ActiveRecord::Schema.define(version: 20171006165207) do
     t.string "castaway_aliases", array: true
   end
 
-  create_table "castaways_categories", id: false, force: :cascade do |t|
+  create_table "castaways_wiki_categories", id: false, force: :cascade do |t|
     t.bigint "castaway_id", null: false
-    t.bigint "category_id", null: false
-  end
-
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.index ["slug"], name: "index_categories_on_slug", unique: true
+    t.bigint "wiki_category_id", null: false
   end
 
   create_table "choices", force: :cascade do |t|
     t.bigint "episode_id"
-    t.bigint "track_id"
+    t.bigint "disc_id"
     t.boolean "favourite"
     t.integer "order"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["disc_id"], name: "index_choices_on_disc_id"
     t.index ["episode_id"], name: "index_choices_on_episode_id"
-    t.index ["track_id"], name: "index_choices_on_track_id"
+  end
+
+  create_table "discs", force: :cascade do |t|
+    t.string "name"
+    t.bigint "artist_id"
+    t.string "album"
+    t.integer "track_number"
+    t.string "record_label"
+    t.string "performers", array: true
+    t.integer "appearances", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+    t.index ["artist_id"], name: "index_discs_on_artist_id"
+    t.index ["slug"], name: "index_discs_on_slug", unique: true
   end
 
   create_table "episodes", force: :cascade do |t|
@@ -95,7 +102,7 @@ ActiveRecord::Schema.define(version: 20171006165207) do
     t.string "index_type"
     t.string "key"
     t.hstore "artists", array: true
-    t.hstore "tracks", array: true
+    t.hstore "discs", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.hstore "books", array: true
@@ -111,21 +118,14 @@ ActiveRecord::Schema.define(version: 20171006165207) do
     t.index ["slug"], name: "index_luxuries_on_slug", unique: true
   end
 
-  create_table "tracks", force: :cascade do |t|
-    t.string "track"
-    t.bigint "artist_id"
-    t.string "album"
-    t.integer "track_number"
-    t.string "record_label"
-    t.string "performers", array: true
-    t.integer "appearances", default: 0
+  create_table "wiki_categories", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
-    t.index ["artist_id"], name: "index_tracks_on_artist_id"
-    t.index ["slug"], name: "index_tracks_on_slug", unique: true
+    t.index ["slug"], name: "index_wiki_categories_on_slug", unique: true
   end
 
+  add_foreign_key "choices", "discs"
   add_foreign_key "choices", "episodes"
-  add_foreign_key "choices", "tracks"
 end

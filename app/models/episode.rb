@@ -10,7 +10,7 @@ class Episode < ApplicationRecord
   belongs_to :book, required: false
   belongs_to :luxury, required: false
   has_many :choices
-  has_many :tracks, through: :choices
+  has_many :discs, through: :choices
   has_many :artists, through: :choices
   has_many :categories, through: :castaway
 
@@ -206,8 +206,8 @@ class Episode < ApplicationRecord
 
     CSV.open("csv_export/choices.csv", "w") do |csv|
       self.order(broadcast_date: :asc).includes(:choices).each do |episode|
-        episode.choices.order(order: :asc).includes(:track,:artist).each do |choice|
-          csv << [episode.broadcast_date, choice.order, choice.artist.name, choice.track.track, choice.favourite]
+        episode.choices.order(order: :asc).includes(:disc,:artist).each do |choice|
+          csv << [episode.broadcast_date, choice.order, choice.artist.name, choice.disc.disc, choice.favourite]
         end
       end
     end
@@ -216,7 +216,7 @@ class Episode < ApplicationRecord
   def self.import
     Choice.delete_all
     Artist.delete_all
-    Track.delete_all
+    Disc.delete_all
     Episode.delete_all
     Castaway.delete_all
     CSV.foreach("csv_export/episodes.csv") do |row|
@@ -228,12 +228,12 @@ class Episode < ApplicationRecord
     end
 
     CSV.foreach("csv_export/choices.csv") do |row|
-      episode_broadcast_date, order, artist_name, track_name, favourite = row
+      episode_broadcast_date, order, artist_name, disc_name, favourite = row
       episode = Episode.where(broadcast_date: episode_broadcast_date).first
       artist = Artist.where(name: artist_name).first_or_create
-      track = Track.where(artist_id: artist.id, track: track_name).first_or_create
+      disc = Disc.where(artist_id: artist.id, disc: disc_name).first_or_create
       choice = Choice.where(episode_id: episode.id, order: order).first_or_create
-      choice.update(track_id: track.id, favourite: favourite)
+      choice.update(disc_id: disc.id, favourite: favourite)
     end
 
   end

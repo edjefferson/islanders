@@ -6,7 +6,7 @@
 <table class = "table table-striped table-sm">
   <tr>
     <th>Order</th>
-    <th>Track</th>
+    <th>Disc</th>
     <th>Artist</th>
     <th>Chosen by # other guests</th>
     <th>Fav?</th>
@@ -14,9 +14,9 @@
 <% @choices.order(order: :asc).each do |choice| %>
 <tr>
   <td><%= image_tag("disc.svg", :alt => "Disc", :height => 16) %> <%= choice.order %></td>
-  <td><%= link_to choice.track.track, choice.track %></td>
-  <td><%= link_to choice.track.artist.name, choice.track.artist %></td>
-  <td><%= choice.track.appearances - 1%></td>
+  <td><%= link_to choice.disc.name, choice.disc %></td>
+  <td><%= link_to choice.disc.artist.name, choice.disc.artist %></td>
+  <td><%= choice.disc.appearances - 1%></td>
   <td><%= choice.favourite %></td>
 </tr>
 <% end %>
@@ -30,6 +30,6 @@
 <p><%= link_to "Wikipedia Page", "http://en.wikipedia.org" + @episode.wikipedia_url.to_s %>
 <% end %>
 
-<% @episode.castaway.categories.each do |category| %>
-  <p><%= link_to category.name, category %></p>
+<% @episode.castaway.wiki_categories.each do |wiki_category| %>
+  <p><%= link_to wiki_category.name, wiki_category %></p>
   <%end%>

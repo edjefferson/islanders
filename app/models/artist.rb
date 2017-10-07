@@ -2,9 +2,9 @@ class Artist < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
 
-  has_many :tracks
-  has_many :choices, through: :tracks
-  has_many :episodes, through: :tracks
+  has_many :discs
+  has_many :choices, through: :discs
+  has_many :episodes, through: :discs
   has_many :categories, through: :episodes
   has_many :castaways, through: :episodes
 
@@ -18,10 +18,10 @@ class Artist < ApplicationRecord
 
   def update_related_artists
     artist_count = {}
-    self.episodes.includes(:tracks).each do |episode|
-      episode.tracks.each do |track|
-        if track.artist.name !=""
-          artist_count[track.artist.id] == nil ? artist_count[track.artist.id] = 1 : artist_count[track.artist.id] +=1
+    self.episodes.includes(:discs).each do |episode|
+      episode.discs.each do |disc|
+        if disc.artist.name !=""
+          artist_count[disc.artist.id] == nil ? artist_count[disc.artist.id] = 1 : artist_count[disc.artist.id] +=1
         end
      end
     end

@@ -1,2 +1,2 @@
 object @feed
-attributes :artists, :tracks, :books, :luxuries
+attributes :artists, :discs, :books, :luxuries
