@@ -40,3 +40,33 @@ p {
 
   padding-left: 10px;
 }
+
+
+
+table {
+
+  table-layout:fixed;
+
+
+
+}
+td,th {
+
+
+
+  white-space: nowrap;
+  font-size: 0.8em;
+  padding-top:0.6em;
+
+}
+td.left,th.left {
+  overflow: hidden;
+  width: 85%;
+  text-overflow: ellipsis;
+}
+
+td.right,th.right {
+  text-align:right;
+  width: 15%;
+
+}

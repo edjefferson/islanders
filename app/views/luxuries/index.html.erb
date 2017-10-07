@@ -1,5 +1,5 @@
 <div class="row beach1">
-  <% decades.each do |decade| %>
+  <% decades.values.each do |decade| %>
     <div class="col">
       <%= link_to decade, "?decade=#{decade}" %>
     </div>

@@ -7,8 +7,8 @@ class Episode < ApplicationRecord
   friendly_id :episode_date, use: :slugged
 
   belongs_to :castaway
-  belongs_to :book
-  belongs_to :luxury
+  belongs_to :book, required: false
+  belongs_to :luxury, required: false
   has_many :choices
   has_many :tracks, through: :choices
   has_many :artists, through: :choices

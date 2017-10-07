@@ -5,7 +5,7 @@
 </div>
 
 <div class="row beach1">
-  <% @decades.each do |decade| %>
+  <% decades.values.each do |decade| %>
     <div class="col">
       <%= link_to decade, "?decade=#{decade}" %>
     </div>
@@ -13,15 +13,21 @@
 </div>
 
 <div class="row beach2">
-  <h2> <%= @current_decade %></h2>
+  <div class="col"><h2>
+    <% if @current_decade != nil %>
+      The <%= @current_decade %>
+    <% else%>
+      All-time
+    <% end %>
+  </h2></div>
 </div>
 
-<div class="row beach2">
+<div class="row">
   <div class="col">
-    <h3>Top 10 <%= link_to "Artists", artists_path %></h3>
+    <h3><%= image_tag("artist.svg", :alt => "Artist", :height => 32) %> Top 10 <%= link_to "Artists", artists_path %></h3>
   </div>
   <div class="col">
-    <h3>Top 10 <%= link_to "Discs", tracks_path %></h3>
+    <h3><%= image_tag("disc.svg", :alt => "Disc", :height => 32) %> Top 10 <%= link_to "Discs", tracks_path %></h3>
   </div>
 </div>
 
@@ -29,10 +35,15 @@
   <div class="col">
     <table class = "table table-striped table-sm">
       <% @artists.each do |artist| %>
-        <tr>
-          <td><%= image_tag("artist.svg", :alt => "Artist", :height => 16) %> <%= link_to artist["name"], "/artists/" + artist["slug"] %></td>
-          <td><%= artist["appearances"] %></td>
+
+
+        <tr class="bar" data-background=<%= artist["appearances"].to_f/@artists[0]["appearances"].to_f %> >
+
+          <td class="left"><span class="offset"><%= image_tag("artist.svg", :alt => "Artist", :height => 16) %> <%= link_to artist["name"], "/artists/" + artist["slug"] %></span></td>
+          <td class="right"><%= artist["appearances"] %></td>
+
         </tr>
+
       <% end %>
     </table>
   </div>
@@ -40,22 +51,22 @@
   <div class="col">
     <table class = "table table-striped table-sm">
       <% @tracks.each do |track| %>
-      <tr>
-        <td><%= image_tag("disc.svg", :alt => "Disc", :height => 16) %> <%= link_to track["name"], "/tracks/" + track["slug"] %> - <%= track["artist"] %></td>
+      <tr class="bar" data-background=<%= track["appearances"].to_f/@tracks[0]["appearances"].to_f %> >
+        <td class="left"><%= image_tag("disc.svg", :alt => "Disc", :height => 16) %> <%= track["artist"] %> - <%= link_to track["name"], "/tracks/" + track["slug"] %></td>
 
-        <td><%= track["appearances"] %></td>
+        <td class="right"><%= track["appearances"] %></td>
       </tr>
       <% end %>
     </table>
   </div>
 </div>
 <% if @books.count != 0 %>
-  <div class="row beach2">
+  <div class="row">
     <div class="col">
-      <h3>Top 10 <%= link_to "Books", books_path %></h3>
+      <h3><%= image_tag("book.svg", :alt => "Book", :height => 32) %>  Top 10 <%= link_to "Books", books_path %></h3>
     </div>
     <div class="col">
-      <h3>Top 10 <%= link_to "Luxuries", luxuries_path %></h3>
+      <h3><%= image_tag("luxury.svg", :alt => "Luxury", :height => 32) %>  Top 10 <%= link_to "Luxuries", luxuries_path %></h3>
     </div>
   </div>
 
@@ -63,9 +74,9 @@
     <div class="col">
       <table class = "table table-striped table-sm">
         <% @books.each do |book| %>
-          <tr>
-            <td><%= image_tag("book.svg", :alt => "Book", :height => 16) %> <%= link_to book["name"], "/books/" + book["slug"] %></td>
-            <td><%= book["appearances"] %></td>
+          <tr class="bar" data-background=<%= book["appearances"].to_f/@books[0]["appearances"].to_f %> >
+            <td class="left"><%= image_tag("book.svg", :alt => "Book", :height => 16) %> <%= link_to book["name"], "/books/" + book["slug"] %></td>
+            <td class="right"><%= book["appearances"] %></td>
           </tr>
         <% end %>
       </table>
@@ -74,9 +85,9 @@
     <div class="col">
       <table class = "table table-striped table-sm">
         <% @luxuries.each do |luxury| %>
-        <tr>
-          <td><%= image_tag("luxury.svg", :alt => "Luxury", :height => 16) %> <%= link_to luxury["name"], "/luxury/" + luxury["slug"] %></td>
-          <td><%= luxury["appearances"] %></td>
+        <tr class="bar" data-background=<%= (luxury["appearances"].to_f/@luxuries[0]["appearances"].to_f) %>>
+          <td class="left"><%= image_tag("luxury.svg", :alt => "Luxury", :height => 16) %> <%= link_to luxury["name"], "/luxuries/" + luxury["slug"].to_s %></td>
+          <td class="right"><%= luxury["appearances"] %></td>
         </tr>
         <% end %>
       </table>

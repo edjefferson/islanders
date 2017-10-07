@@ -14,10 +14,9 @@ class PagesController < ApplicationController
     end
     @artists = index.artists
     @tracks = index.tracks
-
     @books = index.books
     @luxuries = index.luxuries
-
+    puts index.inspect
     @castaways_count = Episode.where.not(broadcast_date: nil).count
     @records_count = Track.count
     @artists_count = Artist.count

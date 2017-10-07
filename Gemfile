@@ -35,14 +35,16 @@ gem 'jbuilder', '~> 2.5'
 gem 'friendly_id', '~> 5.1.0'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'chartkick'
-gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
+gem 'chartjs-ror'
+gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem',
+    # v4.0.0.beta with the Popover version fix:
+    ref: 'b4048df3d26d7ae6520703ba38782f4a7b6d5a3c'
 
 # Gemfile
 gem 'rabl'
 # Also add either `oj` or `yajl-ruby` as the JSON parser
 gem 'oj'
-
+gem 'moving_average'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

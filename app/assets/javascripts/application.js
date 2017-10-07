@@ -15,8 +15,14 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require turbolinks
-//= require Chart.bundle
-//= require chartkick
+//= require Chart.min
 //= require popper
 //= require bootstrap
 //= require_tree .
+$(document).ready(function(){
+  $('tr.bar').each(function(i) {
+    var background = $(this).data('background');
+    console.log("background");
+    $(this).css("background","-webkit-linear-gradient(left, white 0%, white " + background * 100 + "%, transparent 0%");
+  });
+});

@@ -1,5 +1,6 @@
 <h2><%= image_tag("disc.svg", :alt => "Disc", :height => 32) %>  <%= link_to @track.artist.name, @track.artist %> - <%= @track.track %></h2>
 
+<%= line_chart @all_chart_data, @chart_options%>
 
 
 
@@ -10,8 +11,8 @@
   </tr>
 <% @episodes.each do |episode| %>
 <tr>
-  <td><%= image_tag("episode.svg", :alt => "Episode", :height => 16) %>  <%= link_to episode.castaway.name, episode %></td>
-  <td><%= episode.episode_date %></td>
+  <td class="left"><%= image_tag("episode.svg", :alt => "Episode", :height => 16) %>  <%= link_to episode.castaway.name, episode %></td>
+  <td class="right"><%= episode.episode_date %></td>
 </tr>
 <% end %>
 </table>

@@ -11,5 +11,10 @@ class TracksController < ApplicationController
     page = params[:page].to_i + 1
     @track = Track.friendly.find(params[:id])
     @episodes = @track.episodes.distinct.order(broadcast_date: :asc).each_slice(40).to_a[page - 1]
+
+    choices = Choice.joins(:track,:episode).where('tracks.id = ?',@track.id)
+    @chart_options = default_chart_options
+    @all_chart_data = choices_decade_chart(choices)
+
   end
 end
