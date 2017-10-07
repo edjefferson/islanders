@@ -27,22 +27,10 @@ class WikiCategoriesController < ApplicationController
     end
 
 
-    @artists = Artist.where.not(name: "").joins(:choices).where("choices.episode_id = ANY('{?}')", @episodes.pluck(:id)).select('artists.name as name, count(choices.id) as count, artists.slug as slug').order('count desc').group('name, artists.slug')[0..9]
-    @discs = Disc.where.not(disc: "").joins(:choices).where("choices.episode_id = ANY('{?}')", @episodes.pluck(:id)).select('discs.disc as name, count(choices.id) as count, discs.slug as slug').order('count desc').group('name, discs.slug')[0..9]
-    books = {}
-    luxuries = {}
-    @episodes.each do |episode|
-      if episode.book != nil
-        books[episode.book] == nil ? books[episode.book] = 1 : books[episode.book] += 1
-        luxuries[episode.luxury] == nil ? luxuries[episode.luxury] = 1 : luxuries[episode.luxury] += 1
-      end
-    end
-
-    top_10_books = books.sort_by { |book, count| [- count, book] }.select { |book| ["No book","Unknown","",nil,"-"].include?(book[0]) == false}[0..9]
-    @books = top_10_books.map! { |book| {name: book[0], appearances: book[1] } }
-
-    top_10_luxuries = luxuries.sort_by { |luxury, count| [- count, luxury] }.select { |luxury| ["No item","Unknown","",nil,"-"].include?(luxury[0]) == false}[0..9]
-    @luxuries = top_10_luxuries.map! { |luxury| {name: luxury[0], appearances: luxury[1] } }
+    @artists = Artist.where.not(name: "").joins(:choices).where("choices.episode_id = ANY('{?}')", @episodes.pluck(:id)).select('artists.name as name, count(choices.id) as count, artists.slug as slug').order('count desc').group('artists.name, artists.slug')[0..9]
+    @discs = Disc.where.not(name: "").joins(:choices).where("choices.episode_id = ANY('{?}')", @episodes.pluck(:id)).select('discs.name as name, count(choices.id) as count, discs.slug as slug').order('count desc').group('discs.name, discs.slug')[0..9]
+    @books = Book.where.not(name: "").joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).select('books.name as name, count(episodes.id) as count, books.slug as slug').order('count desc').group('name, books.slug')[0..9]
+    @luxuries = Luxury.where.not(name: "").joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).select('luxuries.name as name, count(episodes.id) as count, luxuries.slug as slug').order('count desc').group('name, luxuries.slug')[0..9]
   end
 
 end
