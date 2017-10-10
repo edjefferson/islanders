@@ -4,6 +4,7 @@ class Castaway < ApplicationRecord
   has_many :choices, through: :episodes
 
   has_and_belongs_to_many :wiki_categories
+  has_and_belongs_to_many :categories, -> { distinct }
 
   def self.find_joint_appearances
     Castaway.where("name like '% and %' or name like '% & %' or name like '% Ascension Islands%'")

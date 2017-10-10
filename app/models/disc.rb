@@ -1,7 +1,7 @@
 require 'csv'
 class Disc < ApplicationRecord
   extend FriendlyId
-  friendly_id :disc, use: :slugged
+  friendly_id :name, use: :slugged
 
   belongs_to :artist
   has_many :choices

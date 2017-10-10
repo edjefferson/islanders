@@ -1,4 +1,4 @@
-class WikiCategoriesController < ApplicationController
+class CategoriesController < ApplicationController
   def index
     decade = params[:decade]
 
@@ -9,21 +9,21 @@ class WikiCategoriesController < ApplicationController
       end_date = "#{decade[0..-2].to_i + 9}-12-31"
       @episodes = Episode.where(:broadcast_date => start_date..end_date)
     end
-    @wiki_categories = WikiCategory.all.joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('wiki_categories.id').select('wiki_categories.id, wiki_categories.slug, count(episodes.id) as count, wiki_categories.name').order('count desc').limit(40)
+    @categories = Category.all.joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('categories.id').select('categories.id, categories.slug, count(episodes.id) as count, categories.name').order('count desc').limit(40)
 
   end
 
 
   def show
-    @wiki_category = WikiCategory.friendly.find(params[:id])
+    @category = Category.friendly.find(params[:id])
 
     decade = params[:decade]
     if decade == nil
-      @episodes = @wiki_category.episodes.order(:broadcast_date).includes(:artists,:discs,:castaway)
+      @episodes = @category.episodes.order(:broadcast_date).includes(:artists,:discs,:castaway)
     else
       start_date = "#{decade[0..-2]}-01-01"
       end_date = "#{decade[0..-2].to_i + 9}-12-31"
-      @episodes = @wiki_category.episodes.where(:broadcast_date => start_date..end_date).order(:broadcast_date).includes(:artists,:discs,:castaway)
+      @episodes = @category.episodes.where(:broadcast_date => start_date..end_date).order(:broadcast_date).includes(:artists,:discs,:castaway)
     end
 
 

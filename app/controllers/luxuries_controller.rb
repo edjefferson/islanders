@@ -9,7 +9,7 @@ class LuxuriesController < ApplicationController
       end_date = "#{decade[0..-2].to_i + 9}-12-31"
       @episodes = Episode.where(:broadcast_date => start_date..end_date)
     end
-    @luxuries = Luxury.where.not(name: ["-",nil,"","No item"]).joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('luxuries.id').select('luxuries.id, luxuries.slug, count(episodes.id) as count, luxuries.name').order('count desc')
+    @luxuries = Luxury.where.not(name: ["-",nil,"","No item"]).joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('luxuries.id').select('luxuries.id, luxuries.slug, count(episodes.id) as count, luxuries.name').order('count desc').limit(40)
   end
 
   def show

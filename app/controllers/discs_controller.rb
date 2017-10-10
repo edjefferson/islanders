@@ -17,4 +17,9 @@ class DiscsController < ApplicationController
     @all_chart_data = choices_decade_chart(choices)
 
   end
+
+  helper_method :disc_order
+  def disc_order(episode,disc)
+    Choice.where(episode_id:episode.id, disc_id:disc.id).first.order
+  end
 end

@@ -54,4 +54,10 @@ First picked on <%= @artist.episodes.order(:broadcast_date).first.episode_date %
   </table>
 
 </div>
+<% if @artist.spotify_playlist %>
+
+<div class ="col">
+  <iframe src="https://open.spotify.com/embed/user/islandersdid/playlist/<%= @artist.spotify_playlist %>" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+</div>
+<%end%>
 </div>

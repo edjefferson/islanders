@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171007131858) do
+ActiveRecord::Schema.define(version: 20171009163133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20171007131858) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.hstore "related_artists", array: true
+    t.string "spotify_playlist"
     t.index ["slug"], name: "index_artists_on_slug", unique: true
   end
 
@@ -47,9 +48,22 @@ ActiveRecord::Schema.define(version: 20171007131858) do
     t.string "castaway_aliases", array: true
   end
 
+  create_table "castaways_categories", id: false, force: :cascade do |t|
+    t.bigint "castaway_id", null: false
+    t.bigint "category_id", null: false
+  end
+
   create_table "castaways_wiki_categories", id: false, force: :cascade do |t|
     t.bigint "castaway_id", null: false
     t.bigint "wiki_category_id", null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
   create_table "choices", force: :cascade do |t|

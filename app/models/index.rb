@@ -13,7 +13,7 @@ class Index < ApplicationRecord
       end
       @artists = Artist.where.not(name: [nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id)).group('artists.id').select('artists.id, artists.slug, count(episodes.id) as appearances, artists.name').order('appearances desc').limit(10)
 
-      @discs = Disc.where.not(disc: [nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id)).group('discs.id').select('discs.id, discs.slug, count(episodes.id) as appearances, discs.disc as name').order('appearances desc').limit(10)
+      @discs = Disc.where.not(name: [nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id)).group('discs.id').select('discs.id, discs.slug, count(episodes.id) as appearances, discs.name as name').order('appearances desc').limit(10)
       @books = Book.where.not(name: [nil,"","-","No book"]).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id)).group('books.id').select('books.id, books.slug, count(episodes.id) as appearances, books.name').order('appearances desc').limit(10)
       @luxuries = Luxury.where.not(name: [nil,"","-","No item"]).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id)).group('luxuries.id').select('luxuries.id, luxuries.slug, count(episodes.id) as appearances, luxuries.name').order('appearances desc').limit(10)
 

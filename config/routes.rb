@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :artists
   resources :discs
   resources :episodes
+  resources :categories
   resources :wiki_categories
   resources :books
   resources :luxuries

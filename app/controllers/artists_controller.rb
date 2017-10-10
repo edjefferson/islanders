@@ -20,7 +20,6 @@ class ArtistsController < ApplicationController
     end
     @artists = Artist.where.not(name: ["-",nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('artists.id').select('artists.id, artists.slug, count(artists.id) as appearances, artists.name').order('appearances desc').limit(40).offset(offset)
 
-    @biggest_artist_appearances = Artist.where.not(name: ["-",nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('artists.id').select('artists.id, artists.slug, count(artists.id) as appearances, artists.name').order('appearances desc').limit(1).first.appearances
   end
 
   def show

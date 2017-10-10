@@ -9,7 +9,7 @@ class BooksController < ApplicationController
       end_date = "#{decade[0..-2].to_i + 9}-12-31"
       @episodes = Episode.where(:broadcast_date => start_date..end_date)
     end
-    @books = Book.where.not(name: ["-",nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('books.id').select('books.id, books.slug, count(episodes.id) as count, books.name').order('count desc')
+    @books = Book.where.not(name: ["-",nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('books.id').select('books.id, books.slug, count(episodes.id) as count, books.name').order('count desc').limit(40)
   end
 
   def show

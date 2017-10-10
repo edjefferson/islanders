@@ -10,16 +10,15 @@ class WikiCategory < ApplicationRecord
   has_many :artists, through: :castaways
   has_many :choices, through: :castaways
 
-  scope :ordered, -> { includes(:availabilities).order('availabilities.price') }
   def self.export
     CSV.open("csv_export/categories.csv", "w") do |csv|
-      @categories = WikiCategory.all.joins(:episodes).group('categories.id').select('categories.id, categories.slug, count(episodes.id) as count, categories.name').order('count desc')
-      @categories.each do |category|
-        csv << [category.name, category.count]
+      @wiki_categories = WikiCategory.all.joins(:episodes).group('wiki_categories.id').select('wiki_categories.id, wiki_categories.slug, count(episodes.id) as count, wiki_categories.name').order('count desc')
+      @wiki_categories.each do |wiki_category|
+        csv << [wiki_category.name, wiki_category.count]
       end
     end
-
   end
+
   def self.import_categories
     castaways = WikiCategory.where.not(wikipedia_url: [nil,""])
 

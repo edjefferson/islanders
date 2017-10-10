@@ -1,4 +1,7 @@
+require 'oauth2'
+
 class Artist < ApplicationRecord
+  include SpotifyPlaylists
   extend FriendlyId
   friendly_id :name, use: :slugged
 
@@ -35,5 +38,21 @@ class Artist < ApplicationRecord
       self.update_related_artists
     end
     self.related_artists
+  end
+
+  def generate_spotify_playlist
+    RSpotify::authenticate(ENV["SPOT_ID"], ENV["SPOT_SECRET"])
+
+    #spotify_artist = RSpotify::Artist.search(self.name).first
+    #puts spotify_artist.inspect
+    top_tracks = self.discs.order(appearances: :desc, name: :asc).limit(20)
+    spotify_tracks = top_tracks.map { |track| RSpotify::Track.search("#{self.name} #{track.name}").first.uri }
+    access_token = self.get_access_token
+    if spotify_playlist == nil
+      playlist_uri = self.create_spotify_playlist("islandersdid", access_token, "Islanders - #{self.name}", true)
+      self.update(spotify_playlist: playlist_uri)
+    end
+    self.replace_spotify_playlist("islandersdid", access_token, self.spotify_playlist, spotify_tracks)
+
   end
 end

@@ -1,7 +1,24 @@
+require 'csv'
 class Choice < ApplicationRecord
   belongs_to :episode
   belongs_to :disc
   has_one :artist, through: :disc
+
+  def self.import_corrections
+    CSV.foreach("csv_export/manual_corrections.csv") do |row|
+      puts row[1]
+      episode_date = Time.parse(row[1])
+      episode = Episode.where(broadcast_date: episode_date..(episode_date + 86400)).first
+
+      choice = Choice.where(episode_id: episode.id, order: row[2]).first_or_create
+
+      artist = Artist.where(name: row[3]).first_or_create
+      puts row[4]
+      disc = Disc.where(artist_id: artist.id, name: row[4]).first_or_create
+
+      choice.update(disc_id: disc.id)
+    end
+  end
 
   def self.import(music_choices, episode)
     order = 0
