@@ -41,18 +41,17 @@ class Artist < ApplicationRecord
   end
 
   def generate_spotify_playlist
-    RSpotify::authenticate(ENV["SPOT_ID"], ENV["SPOT_SECRET"])
-
-    #spotify_artist = RSpotify::Artist.search(self.name).first
-    #puts spotify_artist.inspect
     top_tracks = self.discs.order(appearances: :desc, name: :asc).limit(20)
-    spotify_tracks = top_tracks.map { |track| RSpotify::Track.search("#{self.name} #{track.name}").first.uri }
-    access_token = self.get_access_token
+    spotify_tracks = top_tracks.map do |track|
+      result = self.search_spotify_tracks(track.name, self.name)[0]
+      result["uri"] if result != nil
+    end
+
     if spotify_playlist == nil
-      playlist_uri = self.create_spotify_playlist("islandersdid", access_token, "Islanders - #{self.name}", true)
+      playlist_uri = self.create_spotify_playlist("islandersdid", "Islanders - #{self.name}", true)
       self.update(spotify_playlist: playlist_uri)
     end
-    self.replace_spotify_playlist("islandersdid", access_token, self.spotify_playlist, spotify_tracks)
+    self.replace_spotify_playlist("islandersdid", self.spotify_playlist, spotify_tracks)
 
   end
 end

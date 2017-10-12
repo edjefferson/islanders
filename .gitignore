@@ -16,6 +16,8 @@
 /node_modules
 /yarn-error.log
 
+/config/spotify.yml
+
 .byebug_history
 .DS_Store
 .env
