@@ -1,0 +1,56 @@
+.page { display: none; }
+#page1 { display: block; }
+
+
+.sea1 {
+background-color:#6796f9;
+}
+
+.sea2 {
+background-color:#88abf6;
+}
+
+.beach1 {
+background-color:#f2f294;
+}
+
+.beach2 {
+background-color:#f4f4ba;
+}
+
+.container-fluid {
+background-color:#f6f6da;
+
+
+}
+h1 {
+
+
+  padding-left: 10px;
+  a {
+
+    color: white;
+
+  }
+}
+
+
+
+p {
+
+
+  padding-left: 10px;
+}
+
+ul.nav-list {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+    margin: 0;
+}
+
+li.nav-list-item {
+  text-align:center;
+  width: 12.5%;
+  float: left;
+}
