@@ -5,10 +5,6 @@ class ArtistsController < ApplicationController
     offset =  (page * 40) - 40
 
 
-
-
-
-
     decade = params[:decade]
 
     if decade == nil
@@ -18,8 +14,14 @@ class ArtistsController < ApplicationController
       end_date = "#{decade[0..-2].to_i + 9}-12-31"
       @episodes = Episode.where(:broadcast_date => start_date..end_date)
     end
-    @artists = Artist.where.not(name: ["-",nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('artists.id').select('artists.id, artists.slug, count(artists.id) as appearances, artists.name').order('appearances desc').limit(40).offset(offset)
 
+    if params[:classical] == "false"
+      classical_artists = Artist.joins(:genres).where("genres.name like '%classical%' OR genres.name like '%opera%'").select('artists.id')
+      puts classical_artists.count
+      @artists = Artist.where.not(name: ["-",nil,""]).joins(:episodes).where("episodes.id = ANY('{?}') AND artists.id != ALL('{?}')", @episodes.pluck(:id),classical_artists.pluck(:id)).group('artists.id').select('artists.id, artists.slug, count(artists.id) as appearances, artists.name').order('appearances desc').limit(40).offset(offset)
+    else
+      @artists = Artist.where.not(name: ["-",nil,""]).joins(:episodes).where("episodes.id = ANY('{?}')", @episodes.pluck(:id)).group('artists.id').select('artists.id, artists.slug, count(artists.id) as appearances, artists.name').order('appearances desc').limit(40).offset(offset)
+    end
   end
 
   def show

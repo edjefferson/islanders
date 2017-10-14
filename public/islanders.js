@@ -1,8 +1,8 @@
 $(document).ready(function(){
     var cur_page = 1
     $(".next-button").click(function(){
-        $("#page" + cur_page).hide();
-        $("#page" + ( cur_page + 1 )).show();
+        $("#page" + cur_page).fadeOut(1000);
+        $("#page" + ( cur_page + 1 )).fadeIn(1000);
         cur_page += 1
         console.log(cur_page);
     });

@@ -1,4 +1,9 @@
-.page { display: none; }
+.page { display: none;
+  position: absolute;
+  width:100%;
+  background-color:#f6f6da;
+  }
+  
 #page1 { display: block; }
 
 

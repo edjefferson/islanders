@@ -2,7 +2,6 @@ class PagesController < ApplicationController
 
 
   def index
-
     @decades = ["1940s","1950s","1960s","1970s","1980s","1990s","2000s","2010s"]
 
     @current_decade = params[:decade]
@@ -11,6 +10,14 @@ class PagesController < ApplicationController
 
     else
       index = Index.where(index_type: "decade", key: "").first
+    end
+
+    if @current_decade == nil
+      @episodes = Episode.all
+    else
+      start_date = "#{@current_decade[0..-2]}-01-01"
+      end_date = "#{@current_decade[0..-2].to_i + 9}-12-31"
+      @episodes = Episode.where(:broadcast_date => start_date..end_date)
     end
     @artists = index.artists
     @discs = index.discs
@@ -23,6 +30,11 @@ class PagesController < ApplicationController
     @start_date = Episode.where.not(broadcast_date: nil).order(broadcast_date: :asc).first.episode_date
     @feed =  OpenStruct.new({artists: @artists, discs: @discs, books: @books, luxuries: @luxuries})
 
+
+    classical_artists = Artist.joins(:genres).where("genres.name like '%classical%' OR genres.name like '%opera%'").select('artists.id')
+    @classical_count = Choice.joins(:disc).where(:episode_id => @episodes.pluck(:id), :discs => {:artist_id => [classical_artists.pluck(:id)]}).count
+    @total_count = Choice.where(:episode_id => @episodes.pluck(:id)).count
+    @non_classical_count = @total_count - @classical_count
   end
 
 

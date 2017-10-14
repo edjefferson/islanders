@@ -104,18 +104,25 @@ module SpotifyPlaylists
       return JSON.parse(response.body)["uri"].to_s.split(":")[4]
     end
 
-    def search_spotify_tracks(track, artist)
-      formatted_track = track.gsub(" ","%20").downcase
-      formatted_artist = artist.gsub(" ","%20").downcase
-      if formatted_track.to_s != ""
-        options = {limit: 50, offset: 0, market: "GB", type: "track"}
+    def search_spotify_tracks(track, artist, type)
+      track != nil ? formatted_track = "track:" + track.downcase : formatted_track = ""
+      artist != nil ? formatted_artist = "artist:" + artist.downcase : formatted_artist = ""
+      query = (formatted_track + " " + formatted_artist).strip.gsub(" ","%20")
+
+        options = {limit: 50, offset: 0, market: "GB", type: type}
 
         body = nil
-        uri = "https://api.spotify.com/v1/search/?q=track:#{formatted_track}%20artist:#{formatted_artist}&limit=#{options[:limit]}&offset=#{options[:offset]}&type=#{options[:type]}&market=#{options[:market]}"
-
+        uri = "https://api.spotify.com/v1/search/?q=#{query}&limit=#{options[:limit]}&offset=#{options[:offset]}&type=#{options[:type]}&market=#{options[:market]}"
+        puts uri
         response = spotify_api_request(uri, body, "get")
-        return JSON.parse(response.body)["tracks"]["items"]
-      end
+
+        if type == "track"
+          return JSON.parse(response.body)["tracks"]["items"]
+        elsif type == "artist"
+          return JSON.parse(response.body)["artists"]["items"]
+        else
+          return JSON.parse(response.body)
+        end
     end
   end
 end
