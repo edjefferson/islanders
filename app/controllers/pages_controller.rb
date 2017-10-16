@@ -28,13 +28,21 @@ class PagesController < ApplicationController
     @records_count = Disc.count
     @artists_count = Artist.count
     @start_date = Episode.where.not(broadcast_date: nil).order(broadcast_date: :asc).first.episode_date
-    @feed =  OpenStruct.new({artists: @artists, discs: @discs, books: @books, luxuries: @luxuries})
 
 
     classical_artists = Artist.joins(:genres).where("genres.name like '%classical%' OR genres.name like '%opera%'").select('artists.id')
     @classical_count = Choice.joins(:disc).where(:episode_id => @episodes.pluck(:id), :discs => {:artist_id => [classical_artists.pluck(:id)]}).count
     @total_count = Choice.where(:episode_id => @episodes.pluck(:id)).count
     @non_classical_count = @total_count - @classical_count
+    indexes = {}
+    indexes["stats"] = {"castaway_count" => @castaways_count, "artist_count" => @artists_count, "disc_count" => @records_count}
+
+    Index.all.each do |index|
+      indexes[index.key] = {artists: index.artists, discs: index.discs, books: index.books, luxuries: index.luxuries}
+    end
+
+    @feed =  OpenStruct.new({data: indexes})
+
   end
 
 

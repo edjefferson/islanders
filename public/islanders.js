@@ -1,40 +1,49 @@
 $(document).ready(function(){
-    var cur_page = 1
-    $(".next-button").click(function(){
-        $("#page" + cur_page).fadeOut(1000);
-        $("#page" + ( cur_page + 1 )).fadeIn(1000);
-        cur_page += 1
-        console.log(cur_page);
+
+  var data = $.getJSON( "index.json", function( json ) {
+      data = json.openstruct.data;
+      return data;
     });
-});
+  param = "stats"
 
+  var cur_page = 1;
 
-var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
+  var getDecadeTables = function getDecadeTables(sParam) {
+    decade_data = (data[sParam]);
+    console.log(data.stats);
+    $.each(['artists','discs','books','luxuries'], function( index, value ) {
+      content = '';
 
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
+      $.each(decade_data[value], function( index, value ) {
+        if (index < 8) {
+          content += '<tr><td>' + (index + 1) + '</td><td>' + value.name + '</td><td>' + value.appearances + '</td></tr>';
         }
-    }
-};
-var decade = getUrlParameter('decade');
-$.getJSON( "index.json?decade="+decade, function( json ) {
-  for (var key in json.openstruct) {
-    console.log(key);
-    data = json.openstruct[key];
+      });
+      $("#"+value).find('tbody').empty().append(content);
+    })
+  };
 
 
-    for(var i = 0, l = data.length; i < l; ++i) {
+  var getStat = function getStat(param) {
+    return data['stats'][param];
+  };
 
-      console.log(data[i].name);
-      $('#'+key).append('<tr><td>'+data[i].name+'</td><td>'+data[i].appearances+'</td></tr>');
-    }
-  }
-}
-);
+
+
+
+  $(".next-button").click(function(){
+      $("#page" + cur_page).fadeOut(1000);
+      $("#page" + ( cur_page + 1 )).fadeIn(1000);
+      cur_page += 1
+      console.log(cur_page);
+  });
+
+  $('.decade-select').click(function() {
+    var decade = $(this).text();
+    getDecadeTables(decade);
+    return false;
+  });
+
+  console.log(data['stats']);
+
+});
