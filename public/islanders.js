@@ -7,9 +7,9 @@ $(document).ready(function(){
       return data;
     });
 
-
+  var type = "all"
   var cur_page = 1;
-
+  var decade = "all"
   var getTableData = function getTableData(array) {
     var content = '';
     $.each(array, function( index, value ) {
@@ -20,11 +20,13 @@ $(document).ready(function(){
     return content;
   };
 
-  var getDecadeTables = function getDecadeTables(sParam) {
-
-    decade_data = (data[sParam]);
-
-    $("table.data").each( function() {
+  var getDecadeTables = function getDecadeTables(decade, type, musiconly) {
+    decade_data = (data[type+'_'+decade]);
+    var x = 4
+    if (musiconly){
+      x = 2
+    }
+    $("table.data").slice(0,x).each( function() {
 
       table_type = $(this).attr('id');
       var content = getTableData(decade_data[table_type]);
@@ -52,8 +54,9 @@ $(document).ready(function(){
 
   });
 
-
-
+  var setDecadeName = function setDecadeName(decade) {
+    $('#decade-name').fadeOut(function() {$(this).text(decade)} ).fadeIn();
+  }
 
   $(".next-button").click(function(){
       $('html,body').animate({scrollTop: 0}, 500);
@@ -65,13 +68,24 @@ $(document).ready(function(){
   });
 
   $('.all-select').click(function() {
+    $('.decade-name').text("All")
     getDecadeTables("");
+
     return false;
   });
 
   $('.decade-select').click(function() {
-    var decade = $(this).text();
-    getDecadeTables(decade);
+    decade = $(this).text();
+    setDecadeName(decade);
+    getDecadeTables(decade, type, false);
+    return false;
+  });
+
+  $('.type-select').click(function() {
+    type = $(this).attr('id');
+    getDecadeTables(decade, type, true);
+    $('.type-select').css('text-decoration', 'none');
+    $(this).css('text-decoration', 'underline');
     return false;
   });
 
