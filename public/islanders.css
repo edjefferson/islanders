@@ -1,10 +1,13 @@
-.page { display: none;
+.page {
+
+  display: none;
   position: absolute;
-  width:100%;
-  background-color:#f6f6da;
+  width:85%;
+
   }
 
-#page1 { display: block; }
+#page0 { display: block; }
+
 
 
 .sea1 {
@@ -24,10 +27,45 @@ background-color:#f4f4ba;
 }
 
 .container-fluid {
-background-color:#f6f6da;
+position: absolute;
+top: 0;
+padding: 7.5%;
+}
 
+.waves {
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  background-color:#0042DF;
+}
+
+body {
+  background:#aaa;
+	display:flex;
+	justify-content:center;
 
 }
+
+svg > *:nth-child(3) {
+  animation: move 5s infinite ease-in-out;
+	animation-delay:-3s;}
+svg > *:nth-child(4) {
+  animation: move 7s infinite ease-in-out;
+	animation-delay:-5s;}
+svg > *:nth-child(5) {
+  animation: move 9s infinite ease-in-out;
+	animation-delay:-2s;}
+svg > *:nth-child(6) {
+  animation: move 11s infinite ease-in-out;
+	animation-delay:-9s;}
+
+@keyframes move {
+		0% {transform:translateX(0);}
+		50% {transform:translateX(-10px);}
+		100% {transform:translateX(0);}
+}
+
 h1 {
 
 

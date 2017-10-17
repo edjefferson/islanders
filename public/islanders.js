@@ -1,16 +1,19 @@
+
+
 $(document).ready(function(){
 
   var data = $.getJSON( "index.json", function( json ) {
       data = json.openstruct.data;
       return data;
     });
-  param = "stats"
 
-  var cur_page = 1;
+
+  var cur_page = 0;
 
   var getDecadeTables = function getDecadeTables(sParam) {
+
     decade_data = (data[sParam]);
-    console.log(data.stats);
+
     $.each(['artists','discs','books','luxuries'], function( index, value ) {
       content = '';
 
@@ -24,9 +27,20 @@ $(document).ready(function(){
   };
 
 
-  var getStat = function getStat(param) {
-    return data['stats'][param];
-  };
+  $('.start').click(function() {
+
+    var getStat = function getStat(param) {
+      return data.stats[param]
+    };
+
+    $(".stat").each(function(){
+        var stat = $(this).attr('id');
+        $(this).text(getStat(stat));
+    });
+
+
+
+  });
 
 
 
@@ -44,6 +58,8 @@ $(document).ready(function(){
     return false;
   });
 
-  console.log(data['stats']);
+
+
+
 
 });
