@@ -1,22 +1,27 @@
 .page {
 
-  display: none;
+  display: block;
   position: absolute;
-  width:85%;
 
+  width:85%;
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+  padding: 25px;
+  background-color:#f2f294;
   }
 
-#page0 { display: block; }
+  .container-fluid {
+  position: absolute;
+  top: 0;
+  padding: 7.5%;
+  }
 
+.content-block {
 
-
-.sea1 {
-background-color:#6796f9;
 }
 
-.sea2 {
-background-color:#88abf6;
-}
+#page1 { display: block; }
+
 
 .beach1 {
 background-color:#f2f294;
@@ -26,11 +31,7 @@ background-color:#f2f294;
 background-color:#f4f4ba;
 }
 
-.container-fluid {
-position: absolute;
-top: 0;
-padding: 7.5%;
-}
+
 
 .waves {
   position: relative;
@@ -41,8 +42,9 @@ padding: 7.5%;
 }
 
 body {
-  background:#aaa;
-	display:flex;
+  display:flex;
+  background: blue; /* For browsers that do not support gradients */
+	-webkit-transform: translate3d(0,0,0);
 	justify-content:center;
 
 }
@@ -94,6 +96,6 @@ ul.nav-list {
 
 li.nav-list-item {
   text-align:center;
-  width: 12.5%;
+  width: 11.1%;
   float: left;
 }

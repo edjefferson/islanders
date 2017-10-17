@@ -8,21 +8,31 @@ $(document).ready(function(){
     });
 
 
-  var cur_page = 0;
+  var cur_page = 1;
+
+  var getTableData = function getTableData(array) {
+    var content = '';
+    $.each(array, function( index, value ) {
+      if (index < 8) {
+        content += '<tr><td>' + (index + 1) + '</td><td>' + value.name + '</td><td>' + value.appearances + '</td></tr>';
+      }
+    })
+    return content;
+  };
 
   var getDecadeTables = function getDecadeTables(sParam) {
 
     decade_data = (data[sParam]);
 
-    $.each(['artists','discs','books','luxuries'], function( index, value ) {
-      content = '';
+    $("table.data").each( function() {
 
-      $.each(decade_data[value], function( index, value ) {
-        if (index < 8) {
-          content += '<tr><td>' + (index + 1) + '</td><td>' + value.name + '</td><td>' + value.appearances + '</td></tr>';
-        }
-      });
-      $("#"+value).find('tbody').empty().append(content);
+      table_type = $(this).attr('id');
+      var content = getTableData(decade_data[table_type]);
+      $("table#" + table_type).find('tbody').fadeOut(function( ) {
+        $(this).empty().append(content).fadeIn()
+
+      })
+
     })
   };
 
@@ -46,10 +56,17 @@ $(document).ready(function(){
 
 
   $(".next-button").click(function(){
+      $('html,body').animate({scrollTop: 0}, 500);
       $("#page" + cur_page).fadeOut(1000);
+
       $("#page" + ( cur_page + 1 )).fadeIn(1000);
       cur_page += 1
       console.log(cur_page);
+  });
+
+  $('.all-select').click(function() {
+    getDecadeTables("");
+    return false;
   });
 
   $('.decade-select').click(function() {
