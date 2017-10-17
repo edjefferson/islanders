@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   resources :luxuries
 
   get "/index", :to => 'pages#index'
+  get '/artistsfeed', to: 'pages#artists'
+
 end

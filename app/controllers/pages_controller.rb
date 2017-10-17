@@ -46,5 +46,19 @@ class PagesController < ApplicationController
 
   end
 
+  def artists
+    @artists = Artist.all.order(:name).select(:id, :name,:appearances)
+    artist_data = {}
+    @artists.each do |artist|
+      choices = Choice.joins(:artist,:episode).where('artists.id = ?',artist.id)
+      puts choices.count
+      @all_chart_data = get_decade_data(choices)
+      puts artist.name
+      puts @all_chart_data
+      artist_data[artist.name] = @all_chart_data
+    end
+    @feed =  OpenStruct.new({data: artist_data})
+  end
+
 
 end

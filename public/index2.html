@@ -4,8 +4,9 @@
     <title>Islanders</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link rel="stylesheet" href="islanders.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="islanders.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
   </head>
 
   <body>
@@ -181,17 +182,17 @@
         <div class="row"><h2>The Data</h2></div>
         <div class="row beach1">
 
-              <ul class="nav-list">
-                <li class="nav-list-item all-select">All</li>
-                <li class="nav-list-item decade-select">1940s</li>
-                <li class="nav-list-item decade-select">1950s</li>
-                <li class="nav-list-item decade-select">1960s</li>
-                <li class="nav-list-item decade-select">1970s</li>
-                <li class="nav-list-item decade-select">1980s</li>
-                <li class="nav-list-item decade-select">1990s</li>
-                <li class="nav-list-item decade-select" id="2000s">2000s</li>
-                <li class="nav-list-item decade-select" id="2010s">2010s</li>
-              </ul>
+          <ul class="nav-list">
+            <li class="nav-list-item decade-select">All</li>
+            <li class="nav-list-item decade-select">1940s</li>
+            <li class="nav-list-item decade-select">1950s</li>
+            <li class="nav-list-item decade-select">1960s</li>
+            <li class="nav-list-item decade-select">1970s</li>
+            <li class="nav-list-item decade-select">1980s</li>
+            <li class="nav-list-item decade-select">1990s</li>
+            <li class="nav-list-item decade-select" id="2000s">2000s</li>
+            <li class="nav-list-item decade-select" id="2010s">2010s</li>
+          </ul>
 
         </div>
 
@@ -262,7 +263,13 @@
         <div class="row">
         <p>Islanders is an <a href="http://www.twitter.com/edjeff">@edjeff</a> thing.</p>
         </div>
-      </div>
+
+          <div id="artist-popup" class="popup">
+            <p id="artist-info">Info about artist</p>
+            <canvas id="myChart"></canvas>
+            <p id="close"><strong>close</strong></p>
+          </div>
+        </div>
     </div>
   </body>
 </html>

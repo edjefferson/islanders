@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
             }
           }
   end
-
+  helper_method :get_decade_data
   def get_decade_data(relation)
     data = relation.select('(EXTRACT(DECADE FROM episodes.broadcast_date) * 10) as year, count(episodes.id) as count').order('year asc').group('year')
     data.map{ |x| [x.year.to_i, x.count]}.to_h

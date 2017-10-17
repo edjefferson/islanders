@@ -1,9 +1,9 @@
 class Index < ApplicationRecord
   def self.generate_decade_indexes
-    decades = ["","1940s","1950s","1960s","1970s","1980s","1990s","2000s","2010s"]
+    decades = ["All","1940s","1950s","1960s","1970s","1980s","1990s","2000s","2010s"]
     classical_artists = Artist.joins(:genres).where("genres.name like '%classical%' OR genres.name like '%opera%'").select('artists.id').uniq
       decades.each do |decade|
-        if decade == ""
+        if decade == "All"
           episodes = Episode.all.includes(:discs,:artists).uniq
         else
           start_date = "#{decade[0..-2]}-01-01"
@@ -32,7 +32,7 @@ class Index < ApplicationRecord
 
         @discs = Disc.where.not(name: [nil,""]).where(:artist_id => @artists.pluck(:id) ).joins(:episodes).where("episodes.id = ANY('{?}')", episodes.pluck(:id) ).group('discs.id').select('discs.id, discs.slug, count(episodes.id) as appearances, discs.name as name').order('count(episodes.id) desc').limit(10)
 
-        top_10_artists = @artists.map{|x| x.serializable_hash}
+        top_10_artists = @artists[0..9].map{|x| x.serializable_hash}
         top_10_discs = @discs.map{|x| x.serializable_hash}
         top_10_discs.map {|x| x["artist"] = Disc.find(x["id"]).artist.name }
 

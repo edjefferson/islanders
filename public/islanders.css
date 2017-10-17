@@ -1,6 +1,8 @@
+
+
 .page {
 
-  display: none;
+  display: block;
   position: absolute;
 
   width:85%;
@@ -9,6 +11,19 @@
   padding: 25px;
   background-color:#f2f294;
   }
+
+  .popup {
+
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: 12.5%;
+    width:75%;
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 25px;
+    background-color:#f2f294;
+    }
 
   .container-fluid {
   position: absolute;
@@ -46,6 +61,11 @@ body {
   background: blue; /* For browsers that do not support gradients */
 	-webkit-transform: translate3d(0,0,0);
 	justify-content:center;
+
+}
+
+  #myChart {
+    height:50%;
 
 }
 
