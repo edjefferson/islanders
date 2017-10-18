@@ -1,5 +1,24 @@
+body {
+  font-size:16px
+  display:flex;
+  background: blue; /* For browsers that do not support gradients */
+	-webkit-transform: translate3d(0,0,0);
+	justify-content:center;
+
+}
 
 
+p {
+
+  font-size:120%;
+  padding-left: 10px;
+}
+
+@media screen and (max-device-width: 480px) {
+  p {
+    font-size:200%;
+  }
+}
 .page {
 
   display: none;
@@ -57,13 +76,7 @@ background-color:#f4f4ba;
   background-color:#0042DF;
 }
 
-body {
-  display:flex;
-  background: blue; /* For browsers that do not support gradients */
-	-webkit-transform: translate3d(0,0,0);
-	justify-content:center;
 
-}
 
   #myChart {
     height:50%;
@@ -102,11 +115,7 @@ h1 {
 
 
 
-p {
 
-
-  padding-left: 10px;
-}
 
 ul.nav-list {
   width: 100%;
