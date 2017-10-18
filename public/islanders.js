@@ -39,15 +39,16 @@ $(document).ready(function(){
     if (musiconly){
       x = 2
     }
-    $("table.data").slice(0,x).each( function() {
+    $("table.data").each( function() {
 
       table_type = $(this).attr('id');
-      var content = getTableData(decade_data[table_type], table_type.slice(0,-1));
-      $("table#" + table_type).find('tbody').fadeOut(function( ) {
-        $(this).empty().append(content).fadeIn()
+        if ($.inArray( table_type, [ "artists","discs" ] )!= -1 || musiconly == false) {
+        var content = getTableData(decade_data[table_type], table_type.slice(0,-1));
+        $("table#" + table_type).find('tbody').fadeOut(function( ) {
+          $(this).empty().append(content).fadeIn()
 
-      })
-
+        })
+      }
     })
   };
 
