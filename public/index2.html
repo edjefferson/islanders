@@ -105,10 +105,10 @@
       <div id = "page1" class="page content-block">
         <div class="row beach3"><h2>Welcome to the island!</h2></div>
         <div class="row beach2">
-          <p>Since 1942, BBC Radio 4 has regularly been 'marooning' celebrity castaways on a desert island. Each one of them is allowed to take with them just eight pieces of music*, which they select and discuss on the show.</p>
-          <p>Since the 1950s everyone's also been allowed a book - not including The Complete Works of Shakespeare and the Bible (or equivalent religious text), which they get for 'free', and a luxury.*</p>
-          <p>* Or other sound recording.</p>
-          <p>* Strictly speaking, it is supposed to be inanimate and not anything that could aid an escape from the island.</p>
+          <p>Since 1942, BBC Radio 4 has regularly been 'marooning' celebrity castaways on a desert island. Each one of them is allowed to take with them just eight pieces of music[1], which they select and discuss on the show.</p>
+          <p>Since the 1950s everyone's also been allowed a book - not including The Complete Works of Shakespeare and the Bible (or equivalent religious text), which they get for 'free', and a luxury[2].</p>
+          <p>[1] Or other sound recording.</p>
+          <p>[2] Strictly speaking, something inanimate that can't aid an escape from the island.</p>
         </div>
         <div class="row beach1">
           <div id ="next-button" class="start next-button"><p><b>So what have they picked?</b></p></div>
@@ -120,13 +120,13 @@
       <div id = "page2" class="page">
         <div class="row"><h2>The Discs</h2></div>
         <div class="row beach1">
-          <p>Between them, the <span class="stat" id="castaway_count">XXXX</span> castaways, have picked <span class="stat" id="disc_count">XXXX</span> discs by <span class="stat" id="artist_count">XXXX artists</span>.</p>
+          <p>Between them, the <span class="stat" id="castaway_count">XXXX</span> castaways, have picked <span class="stat" id="disc_count">XXXX</span> discs by <span class="stat" id="artist_count">XXXX</span> artists.</p>
 
         </div>
         <div class="row beach2">
           <div class="col-lg">
             <h2>Top Artists</h2>
-            <table id="all-artists" class = "table table-striped table-sm">
+            <table id="artists" class = "table table-striped table-sm">
               <tr><th></th><th></th><th>artist</th><th>#s</th></tr>
               <tr><td>1</td><td><img width="16" src="images/artist.svg"></td><td>Mozart</td><td>69</td></tr>
               <tr><td>2</td><td><img width="16" src="images/artist.svg"></td><td>Beethoven</td><td>69</td></tr>
@@ -139,8 +139,8 @@
             </table>
           </div>
           <div class="col-lg">
-            <h2>Top Pop Artists</h2>
-            <table id="c20-artists" class = "table table-striped table-sm">
+            <h2>Top Non-classical Artists</h2>
+            <table id="notclassical-artists" class = "table table-striped table-sm">
               <tr><th></th><th></th><th>artist</th><th>#s</th></tr>
               <tr><td>1</td><td><img width="16" src="images/artist.svg"></td><td>The Beatles</td><td>69</td></tr>
               <tr><td>2</td><td><img width="16" src="images/artist.svg"></td><td>Frank Sinatra</td><td>69</td></tr>
@@ -153,7 +153,7 @@
             </table>
           </div>
         </div>
-        <div id ="next-button" class="next-button button"><b>Next</b></div>
+        <div id ="next-button" class="next-button button"><p><b>Next</b></p></div>
       </div>
 
       <div id = "page3" class="page">
@@ -161,7 +161,21 @@
         <div class="row">
         <p>Some fun facts about books!</p>
         </div>
-        <div id ="next-button" class="next-button button"><b>Next</b></div>
+        <div class="row">
+          <h3>Top Books</h3>
+          <table id="books" class = "table table-striped table-sm data">
+            <tr><th></th><th></th><th>book</th><th>#s</th></tr>
+            <tr><td>1</td><td><img width="16" src="images/book.svg"></td><td>An book name</td><td>69</td></tr>
+            <tr><td>2</td><td><img width="16" src="images/book.svg"></td><td>An book name</td><td>69</td></tr>
+            <tr><td>3</td><td><img width="16" src="images/book.svg"></td><td>An book name</td><td>69</td></tr>
+            <tr><td>4</td><td><img width="16" src="images/book.svg"></td><td>An book name</td><td>69</td></tr>
+            <tr><td>5</td><td><img width="16" src="images/book.svg"></td><td>A very long book name indeed sir</td><td>69</td></tr>
+            <tr><td>6</td><td><img width="16" src="images/book.svg"></td><td>An book name</td><td>69</td></tr>
+            <tr><td>7</td><td><img width="16" src="images/book.svg"></td><td>Good grief why is this book name so long?</td><td>69</td></tr>
+            <tr><td>8</td><td><img width="16" src="images/book.svg"></td><td>An book name</td><td>69</td></tr>
+          </table>
+        </div>
+        <div id ="next-button" class="next-button button"><p><b>Next</b></p></div>
       </div>
 
       <div id = "page4" class="page">
@@ -169,14 +183,29 @@
         <div class="row">
         <p>Some fun facts about luxuries!</p>
       </div>
+      <div class="row">
+        <h3>Top Luxuries</h3>
+        <table id="luxuries" class = "table table-striped table-sm data">
+          <tr><th></th><th></th><th>luxury</th><th>#s</th></tr>
+          <tr><td>1</td><td><img width="16" src="images/luxury.svg"></td><td>An luxury name</td><td>69</td></tr>
+          <tr><td>2</td><td><img width="16" src="images/luxury.svg"></td><td>An luxury name</td><td>69</td></tr>
+          <tr><td>3</td><td><img width="16" src="images/luxury.svg"></td><td>An luxury name</td><td>69</td></tr>
+          <tr><td>4</td><td><img width="16" src="images/luxury.svg"></td><td>An luxury name</td><td>69</td></tr>
+          <tr><td>5</td><td><img width="16" src="images/luxury.svg"></td><td>A very long luxury name indeed sir</td><td>69</td></tr>
+          <tr><td>6</td><td><img width="16" src="images/luxury.svg"></td><td>An luxury name</td><td>69</td></tr>
+          <tr><td>7</td><td><img width="16" src="images/luxury.svg"></td><td>Good grief why is this luxury name so long?</td><td>69</td></tr>
+          <tr><td>8</td><td><img width="16" src="images/luxury.svg"></td><td>An luxury name</td><td>69</td></tr>
+        </table>
+      </div>
         <div id ="next-button" class="next-button button"><b>Next</b></div>
       </div>
       <div id = "page5" class="page">
         <div class="row"><h2>The Egoists</h2></div>
         <div class="row">
-        <p>23 castaways have picked at least one of their own records. Vain, or didn't understand the rules?</p>
+        <p>Some castaways have picked at least one of their own records. Vain, or didn't understand the rules?</p>
+        <p>Info to go here</p>
       </div>
-        <div id ="next-button" class="next-button button all-select"><b>Explore the data!</b></div>
+        <div id ="next-button" class="next-button button all-select"><p><b>Explore the data!</b></p></div>
       </div>
       <div id = "page6" class="page">
         <div class="row"><h2>The Data</h2></div>

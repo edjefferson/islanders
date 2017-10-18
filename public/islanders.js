@@ -22,20 +22,19 @@ $(document).ready(function(){
   var cur_page = 1;
   var decade = "All"
 
-  var getTableData = function getTableData(array) {
+  var getTableData = function getTableData(array, type) {
+    if (type == "luxurie") { type = "luxury" }
     var content = '';
     $.each(array, function( index, value ) {
       if (index < 8) {
-        content += '<tr><td>' + (index + 1) + '</td><td class="artist-link">' + value.name + '</td><td>' + value.appearances + '</td></tr>';
+        content += '<tr><td><img src="images/'+type+'.svg" width="16"></td><td>' + (index + 1) + '</td><td class="artist-link">' + value.name + '</td><td>' + value.appearances + '</td></tr>';
       }
     })
     return content;
   };
 
   var getDecadeTables = function getDecadeTables(decade, type, musiconly) {
-    console.log(type+'_'+decade);
     decade_data = (data[type+'_'+decade]);
-    console.log(decade_data);
     var x = 4
     if (musiconly){
       x = 2
@@ -43,13 +42,19 @@ $(document).ready(function(){
     $("table.data").slice(0,x).each( function() {
 
       table_type = $(this).attr('id');
-      var content = getTableData(decade_data[table_type]);
+      var content = getTableData(decade_data[table_type], table_type.slice(0,-1));
       $("table#" + table_type).find('tbody').fadeOut(function( ) {
         $(this).empty().append(content).fadeIn()
 
       })
 
     })
+  };
+
+  var getPopTable = function getPopTable() {
+    var content = getTableData(data["notclassical_All"]["artists"],"artist");
+    console.log(content);
+    $("#notclassical-artists").empty().append(content);
   };
 
 
@@ -66,7 +71,7 @@ $(document).ready(function(){
         $(this).text(getStat(stat));
     });
     getDecadeTables("", type, false);
-
+    getPopTable();
 
   });
 
