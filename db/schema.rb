@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171025091738) do
+ActiveRecord::Schema.define(version: 20171025163935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20171025091738) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "own_record", default: false
+    t.string "full_choice_text"
     t.index ["disc_id"], name: "index_choices_on_disc_id"
     t.index ["episode_id"], name: "index_choices_on_episode_id"
   end

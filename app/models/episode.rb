@@ -87,7 +87,7 @@ class Episode < ApplicationRecord
   end
 
   def create_offline_episode_cache
-    self.get_broadcast_date if self.broadcast_date == nil 
+    self.get_broadcast_date if self.broadcast_date == nil
     url_code = self.url.split("/")[-1]
     file_name = "offline_dump/#{self.broadcast_date.strftime('%Y-%m-%d')}_#{url_code}.html"
     if File.file?(file_name) == false
@@ -115,19 +115,18 @@ class Episode < ApplicationRecord
     end
 
     broadcasts = broadcasts.uniq.sort
-
-
     first_broadcast = broadcasts[0]
     puts broadcasts
 
     self.update(broadcast_date: first_broadcast, broadcasts: broadcasts)
-    if self.broadcast_date > Time.now
-      puts "Hasn't been broadcast yet"
-    else
-      download_link = html_doc.css("a.buttons__download__link")
-      self.update(download_url: download_link.attr('href').to_s) if download_link.count > 0
-    end
+    self.get_download_link(html_doc) if self.broadcast_date > Time.now
 
+
+  end
+
+  def get_download_link(html_doc)
+    download_link = html_doc.css("a.buttons__download__link")
+    self.update(download_url: download_link.attr('href').to_s) if download_link.count > 0
   end
 
   def make_offline_data_dump

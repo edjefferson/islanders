@@ -24,7 +24,11 @@ class Choice < ApplicationRecord
     order = 0
     disc_ids = []
     choice_inner_texts = []
-    music_choices.each do |music_choice|
+    music_choices.each_with_index do |music_choice, index|
+
+      full_choice_text = music_choice.css('div.segment__track').inner_text.strip
+
+
       if order < 8
         if music_choice.to_s.upcase.gsub("’","'").include?("CASTAWAY'S FAVOURITE")
           disc_is_favourite = true
@@ -51,6 +55,7 @@ class Choice < ApplicationRecord
           disc_name = music_choice.inner_text.strip
         end
 
+
         artist = Artist.where('lower(name) = ?', artist_name.to_s.downcase).first_or_create(:name=>artist_name)
         #artist.update(appearances: artist.appearances + 1)
         disc = Disc.where("lower(name) = ? AND artist_id = ?", disc_name.to_s.downcase, artist.id).first_or_create(:artist_id => artist.id, :name=>disc_name)
@@ -66,12 +71,14 @@ class Choice < ApplicationRecord
             episode_id: episode.id,
             order: order
           ).first_or_create
-          choice.update(favourite: disc_is_favourite, disc_id: disc.id)
+          choice.update(favourite: disc_is_favourite, disc_id: disc.id, full_choice_text: full_choice_text)
 
         end
 
       end
-    end
+
     episode.choices.where('"order" > 8').delete_all
+
+    end
   end
 end
