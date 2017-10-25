@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171014083643) do
+ActiveRecord::Schema.define(version: 20171025091738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 20171014083643) do
   end
 
   create_table "episodes", force: :cascade do |t|
-    t.datetime "broadcast_date"
+    t.date "broadcast_date"
     t.bigint "castaway_id"
     t.string "url"
     t.string "download_url"
@@ -112,6 +112,8 @@ ActiveRecord::Schema.define(version: 20171014083643) do
     t.string "wikipedia_url"
     t.bigint "book_id"
     t.bigint "luxury_id"
+    t.boolean "offline_cache", default: false
+    t.date "broadcasts", array: true
     t.index ["book_id"], name: "index_episodes_on_book_id"
     t.index ["castaway_id"], name: "index_episodes_on_castaway_id"
     t.index ["luxury_id"], name: "index_episodes_on_luxury_id"

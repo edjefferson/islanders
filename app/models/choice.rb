@@ -53,7 +53,7 @@ class Choice < ApplicationRecord
 
         artist = Artist.where('lower(name) = ?', artist_name.to_s.downcase).first_or_create(:name=>artist_name)
         #artist.update(appearances: artist.appearances + 1)
-        disc = Disc.where("lower(disc) = ? AND artist_id = ?", disc_name.to_s.downcase, artist.id).first_or_create(:artist_id => artist.id, :disc=>disc_name)
+        disc = Disc.where("lower(name) = ? AND artist_id = ?", disc_name.to_s.downcase, artist.id).first_or_create(:artist_id => artist.id, :name=>disc_name)
         #disc.update(appearances: disc.appearances + 1)
 
         choice_inner_text = music_choice.css('div.segment__content').inner_text

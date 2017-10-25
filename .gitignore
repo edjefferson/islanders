@@ -13,6 +13,7 @@
 !/log/.keep
 !/tmp/.keep
 /csv_export
+/offline_dump
 /node_modules
 /yarn-error.log
 

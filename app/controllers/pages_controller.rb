@@ -6,10 +6,10 @@ class PagesController < ApplicationController
 
     @current_decade = params[:decade]
     if @current_decade != nil
-      index = Index.where(index_type: "decade", key: @current_decade).first
+      index = Index.where(index_type: "all", key: @current_decade).first
 
     else
-      index = Index.where(index_type: "decade", key: "").first
+      index = Index.where(index_type: "all", key: "All").first
     end
 
     if @current_decade == nil
@@ -19,6 +19,7 @@ class PagesController < ApplicationController
       end_date = "#{@current_decade[0..-2].to_i + 9}-12-31"
       @episodes = Episode.where(:broadcast_date => start_date..end_date)
     end
+    puts index
     @artists = index.artists
     @discs = index.discs
     @books = index.books

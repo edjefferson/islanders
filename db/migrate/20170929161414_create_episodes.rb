@@ -1,7 +1,7 @@
 class CreateEpisodes < ActiveRecord::Migration[5.1]
   def change
     create_table :episodes do |t|
-      t.datetime :broadcast_date
+      t.date :broadcast_date
       t.references :castaway
       t.string :luxury
       t.string :book
